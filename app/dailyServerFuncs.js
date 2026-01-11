@@ -1,13 +1,7 @@
 'use server'
 import { ObjectId } from "mongodb";
-import client from "./client";
+import client from "./mongoClient";
 
-export async function addPlaceholderDailyScores() {
-  const janFirst = 1;
-  await addScoreForDate(5, janFirst)
-  await addScoreForDate(6, janFirst + 1)
-  await addScoreForDate(8, janFirst + 2)
-}
 export async function addScoreForDate(score, date) {
   await client.connect();
   const db = client.db("dashboarddb");

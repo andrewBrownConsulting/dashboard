@@ -1,35 +1,29 @@
 'use client'
 import { Button, Input, List } from "@chakra-ui/react"
-import { addTodoServer, completeTodoServer, deleteTodoServer, getAllTodosServer } from "./todoServerFuncs";
+import { addTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, getAllCompletedServer, getAllTodosServer } from "./todoServerFuncs";
 import { useEffect, useState } from "react";
-export default function Todo() {
+export default function Todo({ todos, updateLists }) {
   const [name, setName] = useState("");
   const [score, setScore] = useState(0);
   const [info, setInfo] = useState("");
 
-  const [todos, setTodos] = useState([]);
-
-  async function getAllTodos() {
-    const todos = await getAllTodosServer();
-    setTodos(todos);
-  }
   async function addTodo() {
     await addTodoServer(name, score, info);
-    setName(null);
-    setScore(null);
-    setInfo(null);
-    getAllTodos();
+    setName("");
+    setScore("");
+    setInfo("");
+    updateLists();
   }
-  async function deleteId(id) {
+  async function deleteTodo(id) {
     await deleteTodoServer(id);
-    getAllTodos();
+    updateLists();
   }
-  async function completeId(id) {
+  async function completeTodo(id) {
     await completeTodoServer(id);
-    getAllTodos();
+    updateLists();
   }
   useEffect(() => {
-    getAllTodos();
+    updateLists();
   }, [])
   return (
     <div>
@@ -39,8 +33,8 @@ export default function Todo() {
           todos.map((listItem) =>
           (<List.Item key={listItem.id}>
             {listItem.name} - {listItem.score} - {listItem.info}
-            <Button onClick={() => completeId(listItem.id)}>Complete</Button>
-            <Button onClick={() => deleteId(listItem.id)}>X</Button>
+            <Button onClick={() => completeTodo(listItem.id)}>Complete</Button>
+            <Button onClick={() => deleteTodo(listItem.id)}>X</Button>
           </List.Item>))
         }
       </List.Root>
