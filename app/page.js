@@ -1,9 +1,8 @@
 'use client'
 import { useState } from "react";
-import { Grid, GridItem, Box } from "@chakra-ui/react"
+import { Stack, Grid, Heading, Flex, GridItem } from "@chakra-ui/react"
 import PointsGraph from "./pointsGraph";
 import Todo from "./todo"
-import Completed from "./completed";
 import LogoItems from "./logoItems";
 import { getAllCompletedServer, getAllTodosServer } from "./todoServerFuncs";
 export default function Home() {
@@ -17,20 +16,23 @@ export default function Home() {
     setCompleted(completed);
   }
   return (
-    <Box margin={"auto"}>
-      <Grid templateColumns={{ 'bs': '1fr', 'md': '1fr 1fr 1fr 1fr' }}
-        width={'100%'} maxW={1000} gap={10} >
-        <LogoItems updateLists={updateLists} />
-        <GridItem colSpan={4} background={"green.50"} >
-          <PointsGraph />
-        </GridItem>
-        <GridItem colSpan={2}>
-          <Todo todos={todos} updateLists={updateLists} />
-        </GridItem>
-        <GridItem colSpan={2}>
-          <Completed completed={completed} updateLists={updateLists} />
-        </GridItem>
-      </Grid>
-    </Box >
+    <Flex justify="center" >
+      <Stack direction={'column'} maxW="1000" gap={10} >
+        <Flex justify={'center'}>
+          <Heading size={'2xl'}>Andrew Todo</Heading>
+        </Flex>
+        <Flex justify={'center'}>
+          <PointsGraph completed={completed} />
+        </Flex>
+        <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr" }} gap={10}>
+          <GridItem>
+            <Todo todos={todos} completed={completed} updateLists={updateLists} />
+          </GridItem>
+          <GridItem>
+            <LogoItems updateLists={updateLists} />
+          </GridItem>
+        </Grid>
+      </Stack>
+    </Flex >
   );
 }

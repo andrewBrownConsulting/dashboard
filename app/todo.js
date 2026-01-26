@@ -1,18 +1,20 @@
 'use client'
-import { Button, Input, List } from "@chakra-ui/react"
-import { addTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, getAllCompletedServer, getAllTodosServer } from "./todoServerFuncs";
-import { useEffect, useState } from "react";
-export default function Todo({ todos, updateLists }) {
-  const [name, setName] = useState("");
-  const [score, setScore] = useState(0);
-  const [info, setInfo] = useState("");
-
-  async function addTodo() {
-    await addTodoServer(name, score, info);
-    setName("");
-    setScore("");
-    setInfo("");
+import { Grid, GridItem, Button, Heading, Box, List, Stack, Flex, Text } from "@chakra-ui/react"
+import { CheckIcon } from "@chakra-ui/icons";
+import { undoCompleteTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer } from "./todoServerFuncs"; import { useEffect } from "react";
+export default function Todo({ todos, completed, updateLists }) {
+  async function deleteCompleted(id) {
+    await deletedCompletedId(id);
     updateLists();
+  }
+  function isToday(date) {
+    const d = new Date(date);
+    const today = new Date();
+    return (
+      d.getFullYear() === today.getFullYear() &&
+      d.getMonth() === today.getMonth() &&
+      d.getDate() === today.getDate()
+    );
   }
   async function deleteTodo(id) {
     await deleteTodoServer(id);
@@ -22,28 +24,75 @@ export default function Todo({ todos, updateLists }) {
     await completeTodoServer(id);
     updateLists();
   }
+  async function undoCompleteTodo(id) {
+    await undoCompleteTodoServer(id);
+    updateLists();
+  }
   useEffect(() => {
     updateLists();
   }, [])
   return (
-    <div>
-      <h1>To Do:</h1>
-      <List.Root background={'blue'}>
+    <Flex justify={'center'}>
+      <List.Root borderWidth={1} borderColor={"white"} borderRadius={10} maxW={500}>
+        <Flex>
+          <Heading px={2}>To Do:</Heading>
+        </Flex>
         {
-          todos.map((listItem) =>
-          (<List.Item key={listItem.id}>
-            {listItem.name} - {listItem.score} - {listItem.info}
-            <Button onClick={() => completeTodo(listItem.id)}>Complete</Button>
-            <Button onClick={() => deleteTodo(listItem.id)}>X</Button>
-          </List.Item>))
+          completed.filter(item => isToday(item.date)).map((listItem) => (
+            <Grid templateColumns={"1fr 100px 50px 200px 1fr"} gap={2} key={listItem.id}>
+              <GridItem align={'center'} px={2}>
+                <Box
+                  boxSize="20px"
+                  bg="green.500"
+                  borderRadius="full"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={() => undoCompleteTodo(listItem.id)}
+                >
+                  <CheckIcon color="white" boxSize="12px" />
+                </Box>
+              </GridItem>
+              <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
+              <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
+              <GridItem align={'center'} ><Text whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis">{listItem.info}</Text></GridItem>
+              <GridItem align={'center'} >
+                <Button onClick={() => deleteCompleted(listItem.id)} background={'none'}>❌</Button>
+              </GridItem>
+            </Grid>
+          ))
         }
-      </List.Root>
-      <form onSubmit={(e) => { e.preventDefault(); addTodo(); }}>
-        <Input type="text" placeholder="task" value={name} onChange={(e) => setName(e.target.value)} />
-        <Input type="number" placeholder="score" onChange={(e) => setScore(e.target.value)} />
-        <Input type="text" placeholder="description" onChange={(e) => setInfo(e.target.value)} />
-        <Button type="submit">Submit</Button>
-      </form>
-    </div>
+        {
+          todos.map((listItem) => (
+            <Grid templateColumns={"1fr 100px 50px 200px 1fr"} gap={2} key={listItem.id}>
+              <GridItem align={'center'} px={2}>
+                <Box
+                  boxSize="20px"
+                  bg="green.500"
+                  borderRadius="full"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={() => completeTodo(listItem.id)}
+                >
+                  <CheckIcon color="white" boxSize="12px" />
+                </Box>
+              </GridItem>
+              <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
+              <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
+              <GridItem align={'center'} ><Text whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis">{listItem.info}</Text></GridItem>
+              <GridItem align={'center'} >
+                <Button onClick={() => deleteTodo(listItem.id)} background={'none'}>❌</Button>
+              </GridItem>
+            </Grid>
+          ))
+        }
+      </List.Root >
+    </Flex >
+
   );
 }

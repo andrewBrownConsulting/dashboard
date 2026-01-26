@@ -1,63 +1,75 @@
 'use client'
-import { Button, GridItem, Heading, Select, Portal, createListCollection } from "@chakra-ui/react"
+import { Grid, Flex, GridItem, Button, Box, Heading, Select, Portal, createListCollection, Input, Stack } from "@chakra-ui/react"
 import { addTodoServer, } from "./todoServerFuncs";
 import { useState } from "react";
+
+const gymOptions = [
+  { value: "Push 1", score: 5, info: "Bench, Incline, Rope Pushdown, Lats" },
+  { value: "Pull 1", score: 5, info: "Pull up, Barbell Row, Curl, Face Pull" },
+  { value: "Legs 1", score: 5, info: "Squat, Romanian Deadlift, Leg Press, Leg extension, Calf Raise" },
+  { value: "Push 2", score: 5 },
+  { value: "Pull 2", score: 5 },
+  { value: "Legs 2", score: 5 },
+]
+const sleepOptions = [
+  { value: "Pre 6am", score: 10 },
+  { value: "After 6am", score: 0 },
+]
+const readingOptions = [
+  { value: "10 mins", score: 1 },
+  { value: "30 mins", score: 3 },
+  { value: "60 mins", score: 6 },
+]
+
 export default function LogoItems({ updateLists }) {
-  const [gymType, setGymType] = useState("Push")
+  const [type, setType] = useState({ name: 'gym' });
+  const [customType, setCustomType] = useState({ name: "none", score: 0, info: "none" })
   async function addLogoTodo(name, score, info) {
     addTodoServer(name, score, info);
     updateLists();
   }
-  const logoItem = (name, score, info) => (
-    <GridItem height={100} background={"white"} color='black' textAlign={'center'}
-      borderRadius={'lg'} onClick={() => addLogoTodo(name, score, info)}>{name}</GridItem>
+  const logoItem = (name, options) => (
+    <GridItem width={300} background={"black"} color='white' textAlign={'center'}
+      borderRadius={'lg'}  >
+      <Grid templateColumns='1fr 1fr' gap={2}>
+        <GridItem colSpan={2} p={1} height={10}>
+          <Heading >{name}</Heading>
+        </GridItem>
+        {
+          options.map((val) => <Button height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(val.value, val.score, val.info)} p={2} > {val.value}</Button>)
+        }
+      </Grid>
+    </GridItem >
   )
-  const gymOptions = createListCollection({
-    items: [
-      { label: "Push 1", value: "Push 1" },
-      { label: "Pull 1", value: "Pull 1" },
-      { label: "Legs 1", value: "Legs 1" },
-      { label: "Push 2", value: "Push 2" },
-      { label: "Pull 2", value: "Pull 2" },
-      { label: "Legs 2", value: "Legs 2" },
-    ]
-  })
+  const customItem = () => (
+    <GridItem width={300} background={"black"} color='white' textAlign={'center'}
+      borderRadius={'lg'} >
+      <Grid templateColumns='1fr 1fr' gap={2}>
+        <GridItem colSpan={2} p={1} height={10}>
+          <Heading>Custom</Heading>
+        </GridItem>
+        <Input borderColor="white" placeholder="Name" onChange={e => setCustomType(prev => ({ ...prev, name: e.target.value }))} />
+        <Input borderColor="white" placeholder="Info" onChange={e => setCustomType(prev => ({ ...prev, info: e.target.value }))} />
+        <Input borderColor="white" type="number" placeholder="Score" onChange={e => setCustomType(prev => ({ ...prev, score: e.target.value }))} />
+        <Button onClick={() => addLogoTodo(customType.name, customType.score, customType.info)}>Add</Button>
+      </Grid>
+    </GridItem>
+  );
+
   return (
-    <>
-      <GridItem height={100} background={"white"} color='black' textAlign={'center'}
-        borderRadius={'lg'} >
-        <Heading>Gym</Heading>
-        <Select.Root collection={gymOptions} width="320px"
-          value={gymType}
-          onValueChange={e => setGymType(e.value)}
-        >
-          <Select.HiddenSelect />
-          <Select.Label>Select framework</Select.Label>
-          <Select.Control>
-            <Select.Trigger>
-              <Select.ValueText placeholder="Select framework" />
-            </Select.Trigger>
-            <Select.IndicatorGroup>
-              <Select.Indicator />
-            </Select.IndicatorGroup>
-            <Portal>
-              <Select.Positioner>
-                <Select.Content>
-                  {gymOptions.items.map((framework) => (
-                    <Select.Item item={framework} key={framework.value}>
-                      {framework.label}
-                      <Select.ItemIndicator />
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Positioner>
-            </Portal></Select.Control>
-        </Select.Root>
-        <Button onClick={() => addLogoTodo("Gym", 5, gymType)}>Add</Button>
-      </GridItem>
-      {logoItem('Sleep', 10, "Sleep input (currently unsupported)")}
-      {logoItem('Reading', 2, "Read a book for >10 mins")}
-      {logoItem('Social', 3, "Hangout with friends")}
-    </>
+    <Flex justify={'center'}>
+      <Stack direction={"row"}>
+        <Stack direction={'column'}>
+          <Button background='gray.300' height={10} onClick={() => setType({ name: 'gym' })}>Gym</Button>
+          <Button background='gray.300' height={10} onClick={() => setType({ name: 'sleep' })}>Sleep</Button>
+          <Button background='gray.300' height={10} onClick={() => setType({ name: 'reading' })}>Reading</Button>
+          <Button background='gray.300' height={10} onClick={() => setType({ name: 'custom' })}>Custom</Button>
+        </Stack>
+        {type.name == 'gym' && logoItem("Gym", gymOptions)}
+        {type.name == 'sleep' && logoItem("Sleep", sleepOptions)}
+        {type.name == 'reading' && logoItem("Reading", readingOptions)}
+        {type.name == 'custom' && customItem()}
+      </Stack>
+    </Flex>
   )
 }

@@ -31,15 +31,25 @@ export async function completeTodoServer(id) {
   const task = await todo.findOne({ _id: new ObjectId(id) });
   await completed.insertOne({ ...task, date: date });
   await todo.deleteOne({ _id: new ObjectId(id) });
-  const completeTasks = await completed.find({}).toArray()
-  console.log(completeTasks)
+}
+export async function undoCompleteTodoServer(id) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const todo = db.collection("todo")
+  const completed = db.collection("completed")
+  const date = new Date();
+  const task = await completed.findOne({ _id: new ObjectId(id) });
+  await todo.insertOne({ ...task, date: date });
+  await completed.deleteOne({ _id: new ObjectId(id) });
+
 }
 export async function getAllCompletedServer() {
   await client.connect();
   const db = client.db("dashboarddb");
   const completed = db.collection("completed")
   let completedArray = await completed.find({}).toArray();
-  completedArray = completedArray.map(val => ({ id: val._id.toString(), name: val.name, score: val.score, info: val.info }))
+  completedArray = completedArray.map(val => (
+    { id: val._id.toString(), name: val.name, score: val.score, info: val.info, date: val.date }))
   return completedArray;
 }
 export async function deletedCompletedId(id) {
