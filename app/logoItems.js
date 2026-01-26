@@ -36,7 +36,7 @@ export default function LogoItems({ updateLists }) {
           <Heading >{name}</Heading>
         </GridItem>
         {
-          options.map((val) => <Button height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(val.value, val.score, val.info)} p={2} > {val.value}</Button>)
+          options.map((val) => <Button id={val.name} height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(val.value, val.score, val.info)} p={2} > {val.value}</Button>)
         }
       </Grid>
     </GridItem >

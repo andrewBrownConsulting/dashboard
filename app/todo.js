@@ -39,8 +39,8 @@ export default function Todo({ todos, completed, updateLists }) {
         </Flex>
         {
           completed.filter(item => isToday(item.date)).map((listItem) => (
-            <Grid templateColumns={"1fr 100px 50px 200px 1fr"} gap={2} key={listItem.id}>
-              <GridItem align={'center'} px={2}>
+            <Grid templateColumns={"1fr 80px 50px 150px 1fr"} gap={2} key={listItem.id} textDecoration={"line-through"}>
+              <GridItem align={'center'} px={2} >
                 <Box
                   boxSize="20px"
                   bg="green.500"
@@ -66,7 +66,7 @@ export default function Todo({ todos, completed, updateLists }) {
         }
         {
           todos.map((listItem) => (
-            <Grid templateColumns={"1fr 100px 50px 200px 1fr"} gap={2} key={listItem.id}>
+            <Grid templateColumns={"1fr 80px 50px 150px 1fr"} gap={2} key={listItem.id}>
               <GridItem align={'center'} px={2}>
                 <Box
                   boxSize="20px"
