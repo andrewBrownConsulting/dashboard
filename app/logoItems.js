@@ -16,9 +16,9 @@ const sleepOptions = [
   { value: "After 6am", score: 0 },
 ]
 const readingOptions = [
-  { value: "10 mins", score: 1 },
-  { value: "30 mins", score: 3 },
-  { value: "60 mins", score: 6 },
+  { value: "10 mins", score: 1, info: "Read for 10 mins" },
+  { value: "30 mins", score: 3, info: "Read for 30 mins" },
+  { value: "60 mins", score: 6, info: "Read for 60 mins" },
 ]
 
 export default function LogoItems({ updateLists }) {

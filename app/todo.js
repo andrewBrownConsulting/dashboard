@@ -70,14 +70,13 @@ export default function Todo({ todos, completed, updateLists }) {
               <GridItem align={'center'} px={2}>
                 <Box
                   boxSize="20px"
-                  bg="green.500"
+                  bg="gray"
                   borderRadius="full"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
                   onClick={() => completeTodo(listItem.id)}
                 >
-                  <CheckIcon color="white" boxSize="12px" />
                 </Box>
               </GridItem>
               <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
