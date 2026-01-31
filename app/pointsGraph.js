@@ -13,7 +13,6 @@ export default function PointsGraph({ completed }) {
   }
   useEffect(() => {
     width = Math.min(1000, window.innerWidth);
-    console.log(width)
     const dateScores = completed.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
     const dayScores = Object.values(dateScores.reduce((acc, { date, score }) => {
       if (!acc[date]) acc[date] = { date, score: 0 };
@@ -22,6 +21,8 @@ export default function PointsGraph({ completed }) {
     }, {}))
     setDailyScores(dayScores);
   }, [completed]);
+
+  const margin = 25;
 
   useEffect(() => {
     if (dailyScores.length == 0)
@@ -34,7 +35,6 @@ export default function PointsGraph({ completed }) {
     let maxScore = Math.max(...scores);
     let maxDate = Math.max(...dates);
 
-    const margin = 25;
     const xScale = d3.scaleLinear()
       .domain([minDate, maxDate])
       .range([margin, width - margin]);
@@ -42,23 +42,21 @@ export default function PointsGraph({ completed }) {
       .domain([0, maxScore])
       .range([height - margin, margin]);
 
-
+    const svg = d3.select('#chart');
+    svg.attr('width', width);
+    svg.attr('height', height);
 
     const xAxis = d3.axisBottom(xScale).ticks(10)
     const yAxis = d3.axisLeft(yScale).ticks(5)
 
-    d3.select('#chart').append("g")
-      .attr("transform", `translate(${margin}, 0)`) // move to bottom
-      .call(yAxis);
-
-    const svg = d3.select('#chart')
-    d3.select('#chart').append("g")
+    const xAxisG = d3.select('#chart').append("g")
       .attr("transform", `translate(0, ${height - margin})`) // move to bottom
-      .call(xAxis);
-    d3.select('#chart').attr('width', width);
-    d3.select('#chart').attr('height', height);
-    d3.select('#chart')
-      .selectAll('circle')
+    const yAxisG = d3.select('#chart').append("g")
+      .attr("transform", `translate(${margin}, 0)`) // move to bottom
+
+    xAxisG.call(xAxis)
+    yAxisG.call(yAxis)
+    svg.selectAll('circle')
       .data(dailyScores)
       .join('circle')
       .attr('r', 10)
@@ -67,36 +65,32 @@ export default function PointsGraph({ completed }) {
       .attr('cy', d => yScale(d.score))
       .on("mouseover", (event, d) => {
         svg.selectAll("text.info").remove();
-        const [x, y] = [xScale(d.date), yScale(d.score)]
         svg.append("text")
           .attr("class", "info")
-          .attr("x", x + 20)
-          .attr("y", y - 10)
+          .attr("x", ((xScale(d.date) - width < -100) ? (xScale(d.date) + 20) : (xScale(d.date) - 80)))
+          .attr("y", yScale(d.score) - 10)
           .text(`Score: ${d.score}`)
           .attr("font-family", "sans-serif")
           .attr("font-size", "14px")
-          .attr("fill", "white");
+          .attr("fill", "white")
+          .attr("background", "black")
       })
       .on("mouseleave", (event, d) => {
         svg.selectAll("text.info").remove();
-      })
+      });
     const line = d3.line()
       .curve(d3.curveBasis)
       .x(d => xScale(d.date))
       .y(d => yScale(d.score))
-    const path = d3.select('#chart')
-      .selectAll('path')      // Select existing path(s)
-      .data([dailyScores]);   // Bind new data as an array
-    path.join(
-      enter => enter.append('path')
-        .attr('fill', 'none')
-        .attr('stroke', 'white')
-        .attr('stroke-width', 4)
-        .attr('d', line),   // initial path
-      update => update.transition()   // animate changes
-        .duration(500)
-        .attr('d', line)
-    );
+
+    const path = svg.selectAll('.line')      // Select existing path(s)
+      .data([dailyScores])
+      .join('path')
+      .attr('class', 'line')
+      .attr('fill', 'none')
+      .attr('stroke', 'white')
+      .attr('stroke-width', 4)
+      .attr('d', line)  // initial path
   }, [dailyScores])
 
   return (

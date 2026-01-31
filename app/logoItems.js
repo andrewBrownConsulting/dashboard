@@ -10,6 +10,8 @@ const gymOptions = [
   { value: "Push 2", score: 5 },
   { value: "Pull 2", score: 5 },
   { value: "Legs 2", score: 5 },
+  { value: "Run 30 mins", score: 5, info: "Pace 8, no breaks" },
+  { value: "Run 60 mins", score: 10, info: "Pace 8, no breaks" },
 ]
 const sleepOptions = [
   { value: "Pre 6am", score: 10 },
@@ -19,8 +21,12 @@ const readingOptions = [
   { value: "10 mins", score: 1, info: "Read for 10 mins" },
   { value: "30 mins", score: 3, info: "Read for 30 mins" },
   { value: "60 mins", score: 6, info: "Read for 60 mins" },
+  { value: "NYTimes", score: 2, info: "Complete NYTimes Games" },
 ]
-
+const workOptions = [
+  { value: "Work 9 to 5", score: 10 },
+  { value: "1 Hour Personal Project", score: 2 },
+]
 export default function LogoItems({ updateLists }) {
   const [type, setType] = useState({ name: 'gym' });
   const [customType, setCustomType] = useState({ name: "none", score: 0, info: "none" })
@@ -36,7 +42,7 @@ export default function LogoItems({ updateLists }) {
           <Heading >{name}</Heading>
         </GridItem>
         {
-          options.map((val) => <Button id={val.name} height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(val.value, val.score, val.info)} p={2} > {val.value}</Button>)
+          options.map((val, i) => <Button key={i} id={val.name} height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(val.value, val.score, val.info)} p={2} > {val.value}</Button>)
         }
       </Grid>
     </GridItem >
@@ -63,11 +69,13 @@ export default function LogoItems({ updateLists }) {
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'gym' })}>Gym</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'sleep' })}>Sleep</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'reading' })}>Reading</Button>
+          <Button background='gray.300' height={10} onClick={() => setType({ name: 'work' })}>Work</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'custom' })}>Custom</Button>
         </Stack>
         {type.name == 'gym' && logoItem("Gym", gymOptions)}
         {type.name == 'sleep' && logoItem("Sleep", sleepOptions)}
         {type.name == 'reading' && logoItem("Reading", readingOptions)}
+        {type.name == 'work' && logoItem("Work", workOptions)}
         {type.name == 'custom' && customItem()}
       </Stack>
     </Flex>
