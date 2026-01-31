@@ -5,13 +5,13 @@ import { useState } from "react";
 
 const gymOptions = [
   { value: "Push 1", score: 5, info: "Bench, Incline, Rope Pushdown, Lats" },
-  { value: "Pull 1", score: 5, info: "Pull up, Barbell Row, Curl, Face Pull" },
-  { value: "Legs 1", score: 5, info: "Squat, Romanian Deadlift, Leg Press, Leg extension, Calf Raise" },
   { value: "Push 2", score: 5 },
+  { value: "Pull 1", score: 5, info: "Pull up, Barbell Row, Curl, Face Pull" },
   { value: "Pull 2", score: 5 },
+  { value: "Legs 1", score: 5, info: "Squat, Romanian Deadlift, Leg Press, Leg extension, Calf Raise" },
   { value: "Legs 2", score: 5 },
-  { value: "Run 30 mins", score: 5, info: "Pace 8, no breaks" },
-  { value: "Run 60 mins", score: 10, info: "Pace 8, no breaks" },
+  { value: "Run 30", score: 5, info: "Pace 8, no breaks" },
+  { value: "Run 60", score: 10, info: "Pace 8, no breaks" },
 ]
 const sleepOptions = [
   { value: "Pre 6am", score: 10 },
@@ -26,6 +26,10 @@ const readingOptions = [
 const workOptions = [
   { value: "Work 9 to 5", score: 10 },
   { value: "1 Hour Personal Project", score: 2 },
+]
+const socialOptions = [
+  { value: "Go on Date", score: 10 },
+  { value: "Go out with Friends ", score: 10 },
 ]
 export default function LogoItems({ updateLists }) {
   const [type, setType] = useState({ name: 'gym' });
@@ -70,12 +74,14 @@ export default function LogoItems({ updateLists }) {
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'sleep' })}>Sleep</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'reading' })}>Reading</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'work' })}>Work</Button>
+          <Button background='gray.300' height={10} onClick={() => setType({ name: 'social' })}>Social</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'custom' })}>Custom</Button>
         </Stack>
         {type.name == 'gym' && logoItem("Gym", gymOptions)}
         {type.name == 'sleep' && logoItem("Sleep", sleepOptions)}
         {type.name == 'reading' && logoItem("Reading", readingOptions)}
         {type.name == 'work' && logoItem("Work", workOptions)}
+        {type.name == 'social' && logoItem("Social", socialOptions)}
         {type.name == 'custom' && customItem()}
       </Stack>
     </Flex>

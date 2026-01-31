@@ -1,0 +1,10 @@
+import { Flex, Heading } from "@chakra-ui/react"
+import Link from "next/link"
+export default function Header() {
+  return (
+    <Flex justify={'center'}>
+      <Link href={'/'}><Heading size={'2xl'}>Andrew Todo</Heading>  </Link>
+      <Link href={'/all'}>View All</Link>
+    </Flex>
+  )
+}

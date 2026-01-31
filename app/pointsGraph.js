@@ -43,6 +43,7 @@ export default function PointsGraph({ completed }) {
       .range([height - margin, margin]);
 
     const svg = d3.select('#chart');
+    svg.selectAll('g').remove();
     svg.attr('width', width);
     svg.attr('height', height);
 

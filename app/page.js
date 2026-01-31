@@ -5,6 +5,8 @@ import PointsGraph from "./pointsGraph";
 import Todo from "./todo"
 import LogoItems from "./logoItems";
 import { getAllCompletedServer, getAllTodosServer } from "./todoServerFuncs";
+import Link from "next/link";
+import Header from "./Header";
 export default function Home() {
 
   const [todos, setTodos] = useState([]);
@@ -18,9 +20,7 @@ export default function Home() {
   return (
     <Flex justify="center" >
       <Stack direction={'column'} maxW="1000" gap={10} >
-        <Flex justify={'center'}>
-          <Heading size={'2xl'}>Andrew Todo</Heading>
-        </Flex>
+        <Header />
         <Flex justify={'center'}>
           <PointsGraph completed={completed} />
         </Flex>
