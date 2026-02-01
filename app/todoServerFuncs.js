@@ -32,6 +32,14 @@ export async function completeTodoServer(id) {
   await completed.insertOne({ ...task, date: date });
   await todo.deleteOne({ _id: new ObjectId(id) });
 }
+export async function addCompleteServer(name, score, info) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const completed = db.collection("completed")
+  const date = new Date();
+  await completed.insertOne({ name, score, info, date });
+}
+
 export async function undoCompleteTodoServer(id) {
   await client.connect();
   const db = client.db("dashboarddb");

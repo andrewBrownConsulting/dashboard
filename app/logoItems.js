@@ -26,6 +26,7 @@ const readingOptions = [
 const workOptions = [
   { value: "Work 9 to 5", score: 10 },
   { value: "1 Hour Personal Project", score: 2 },
+  { value: "Write a blog article", score: 5 },
 ]
 const socialOptions = [
   { value: "Go on Date", score: 10 },
