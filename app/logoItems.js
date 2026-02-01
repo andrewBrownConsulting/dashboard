@@ -3,20 +3,6 @@ import { Grid, Flex, GridItem, Button, Box, Heading, Select, Portal, createListC
 import { addTodoServer, } from "./todoServerFuncs";
 import { useState } from "react";
 
-const gymOptions = [
-  { value: "Push 1", score: 5, info: "Bench, Incline, Rope Pushdown, Lats" },
-  { value: "Push 2", score: 5 },
-  { value: "Pull 1", score: 5, info: "Pull up, Barbell Row, Curl, Face Pull" },
-  { value: "Pull 2", score: 5 },
-  { value: "Legs 1", score: 5, info: "Squat, Romanian Deadlift, Leg Press, Leg extension, Calf Raise" },
-  { value: "Legs 2", score: 5 },
-  { value: "Run 30", score: 5, info: "Pace 8, no breaks" },
-  { value: "Run 60", score: 10, info: "Pace 8, no breaks" },
-]
-const sleepOptions = [
-  { value: "Pre 6am", score: 10 },
-  { value: "After 6am", score: 0 },
-]
 const readingOptions = [
   { value: "10 mins", score: 1, info: "Read for 10 mins" },
   { value: "30 mins", score: 3, info: "Read for 30 mins" },
@@ -33,7 +19,7 @@ const socialOptions = [
   { value: "Go out with Friends ", score: 10 },
 ]
 export default function LogoItems({ updateLists }) {
-  const [type, setType] = useState({ name: 'gym' });
+  const [type, setType] = useState({ name: 'custom' });
   const [customType, setCustomType] = useState({ name: "none", score: 0, info: "none" })
   async function addLogoTodo(name, score, info) {
     addTodoServer(name, score, info);
@@ -71,15 +57,11 @@ export default function LogoItems({ updateLists }) {
     <Flex justify={'center'}>
       <Stack direction={"row"}>
         <Stack direction={'column'}>
-          <Button background='gray.300' height={10} onClick={() => setType({ name: 'gym' })}>Gym</Button>
-          <Button background='gray.300' height={10} onClick={() => setType({ name: 'sleep' })}>Sleep</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'reading' })}>Reading</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'work' })}>Work</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'social' })}>Social</Button>
           <Button background='gray.300' height={10} onClick={() => setType({ name: 'custom' })}>Custom</Button>
         </Stack>
-        {type.name == 'gym' && logoItem("Gym", gymOptions)}
-        {type.name == 'sleep' && logoItem("Sleep", sleepOptions)}
         {type.name == 'reading' && logoItem("Reading", readingOptions)}
         {type.name == 'work' && logoItem("Work", workOptions)}
         {type.name == 'social' && logoItem("Social", socialOptions)}
