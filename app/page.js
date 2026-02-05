@@ -28,7 +28,6 @@ export default function Home() {
         <Flex justify={'center'}>
           <PointsGraph completed={completed} />
         </Flex>
-        <LongTerms longTerm={longTerm} />
         <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr" }} gap={10}>
           <GridItem>
             <Todo todos={todos} completed={completed} updateLists={updateLists} />
@@ -37,6 +36,7 @@ export default function Home() {
             <LogoItems updateLists={updateLists} />
           </GridItem>
         </Grid>
+        <LongTerms longTerm={longTerm} />
       </Stack>
     </Flex >
   );
