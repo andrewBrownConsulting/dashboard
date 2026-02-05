@@ -8,7 +8,7 @@ function minutesAfter6am(date = new Date()) {
 }
 export async function POST() {
   const minsLate = minutesAfter6am();
-  const score = Math.max(100 - minsLate, 0) / 100;
+  const score = Math.max(100 - minsLate, 0) / 10;
   await addCompleteServer("Wake Up at 6am", score, ("Woke up " + minsLate + " mins late"));
   return NextResponse.json({ message: 'Woke up ' + minsLate + " mins late" })
 }

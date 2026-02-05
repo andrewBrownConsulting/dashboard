@@ -1,21 +1,25 @@
 'use client'
 import { useState } from "react";
-import { Stack, Grid, Heading, Flex, GridItem } from "@chakra-ui/react"
+import { Stack, Grid, Flex, GridItem } from "@chakra-ui/react"
 import PointsGraph from "./pointsGraph";
 import Todo from "./todo"
 import LogoItems from "./logoItems";
-import { getAllCompletedServer, getAllTodosServer } from "./todoServerFuncs";
-import Link from "next/link";
+import { getAllCompletedServer, getAllLongTermRecords, getAllTodosServer } from "./todoServerFuncs";
 import Header from "./Header";
-export default function Home() {
+import LongTerms from "./longTerms";
 
+export default function Home() {
   const [todos, setTodos] = useState([]);
   const [completed, setCompleted] = useState([]);
+  const [longTerm, setLongTerm] = useState([]);
   async function updateLists() {
     const todos = await getAllTodosServer();
     const completed = await getAllCompletedServer();
+    let longTerm = await getAllLongTermRecords();
+    longTerm = longTerm.sort((a, b) => (a.date - b.date));
     setTodos(todos);
     setCompleted(completed);
+    setLongTerm(longTerm);
   }
   return (
     <Flex justify="center" >
@@ -24,6 +28,7 @@ export default function Home() {
         <Flex justify={'center'}>
           <PointsGraph completed={completed} />
         </Flex>
+        <LongTerms longTerm={longTerm} />
         <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr" }} gap={10}>
           <GridItem>
             <Todo todos={todos} completed={completed} updateLists={updateLists} />

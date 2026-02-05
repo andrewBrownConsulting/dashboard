@@ -66,3 +66,28 @@ export async function deletedCompletedId(id) {
   const todo = db.collection("completed")
   await todo.deleteOne({ _id: new ObjectId(id) });
 }
+export async function addLongTermRecord(name, score) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const longScores = db.collection("longScores")
+  const date = new Date();
+  await longScores.insertOne({ name, score, date });
+}
+export async function getLongTermRecords(name) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const longScores = db.collection("longScores")
+  let longTermArray = await longScores.find({ name: name }).toArray();
+  longTermArray = longTermArray.map(val => (
+    { id: val._id.toString(), name: val.name, score: val.score, date: val.date }))
+  return longTermArray;
+}
+export async function getAllLongTermRecords() {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const longScores = db.collection("longScores")
+  let longTermArray = await longScores.find({}).toArray();
+  longTermArray = longTermArray.map(val => (
+    { id: val._id.toString(), name: val.name, score: val.score, date: val.date }))
+  return longTermArray;
+}
