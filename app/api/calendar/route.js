@@ -1,7 +1,7 @@
 import { addCompleteServer } from '@/app/todoServerFuncs'
 import { NextResponse } from 'next/server'
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
     const { name, info, score } = await req.json();
     await addCompleteServer(name, score, info);
