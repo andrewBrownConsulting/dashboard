@@ -33,13 +33,13 @@ export default function Todo({ todos, completed, updateLists }) {
   }, [])
   return (
     <Flex justify={'center'}>
-      <List.Root borderWidth={1} borderColor={"white"} borderRadius={10} maxW={500}>
+      <List.Root borderWidth={1} borderColor={"white"} borderRadius={10}>
         <Flex>
           <Heading px={2}>To Do:</Heading>
         </Flex>
         {
           completed.filter(item => isToday(item.date)).map((listItem) => (
-            <Grid templateColumns={"1fr 80px 50px 150px 1fr"} gap={2} key={listItem.id} textDecoration={"line-through"}>
+            <Grid templateColumns={"1fr 120px 50px 150px 1fr"} gap={2} key={listItem.id} textDecoration={"line-through"}>
               <GridItem align={'center'} px={2} >
                 <Box
                   boxSize="20px"
@@ -55,9 +55,8 @@ export default function Todo({ todos, completed, updateLists }) {
               </GridItem>
               <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
               <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
-              <GridItem align={'center'} ><Text whiteSpace="nowrap"
-                overflow="hidden"
-                textOverflow="ellipsis">{listItem.info}</Text></GridItem>
+              <GridItem align={'center'} ><Text overflow="hidden" textOverflow="ellipsis">
+                {listItem.info}</Text></GridItem>
               <GridItem align={'center'} >
                 <Button onClick={() => deleteCompleted(listItem.id)} background={'none'}>❌</Button>
               </GridItem>
@@ -66,7 +65,7 @@ export default function Todo({ todos, completed, updateLists }) {
         }
         {
           todos.map((listItem) => (
-            <Grid templateColumns={"1fr 80px 50px 150px 1fr"} gap={2} key={listItem.id}>
+            <Grid templateColumns={"1fr 120px 50px 150px 1fr"} gap={2} key={listItem.id}>
               <GridItem align={'center'} px={2}>
                 <Box
                   boxSize="20px"
@@ -75,8 +74,7 @@ export default function Todo({ todos, completed, updateLists }) {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  onClick={() => completeTodo(listItem.id)}
-                >
+                  onClick={() => completeTodo(listItem.id)}>
                 </Box>
               </GridItem>
               <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
