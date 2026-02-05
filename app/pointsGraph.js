@@ -11,6 +11,11 @@ export default function PointsGraph({ completed }) {
     const msPerDay = 24 * 60 * 60 * 1000;
     return Math.floor((d - jan1) / msPerDay);
   }
+  function dateFromDays(days) {
+    const d = new Date(2026, 0, 1);
+    d.setDate(d.getDate() + days);
+    return d;
+  }
   useEffect(() => {
     width = Math.min(1000, window.innerWidth);
     const dateScores = completed.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
@@ -68,9 +73,9 @@ export default function PointsGraph({ completed }) {
         svg.selectAll("text.info").remove();
         svg.append("text")
           .attr("class", "info")
-          .attr("x", ((xScale(d.date) - width < -100) ? (xScale(d.date) + 20) : (xScale(d.date) - 80)))
+          .attr("x", ((xScale(d.date) - width < -200) ? (xScale(d.date) + 20) : (xScale(d.date) - 150)))
           .attr("y", yScale(d.score) - 10)
-          .text(`Score: ${d.score}`)
+          .text(`Score: ${d.score}\n${dateFromDays(d.date).toLocaleDateString()}`)
           .attr("font-family", "sans-serif")
           .attr("font-size", "14px")
           .attr("fill", "white")
