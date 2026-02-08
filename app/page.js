@@ -15,15 +15,13 @@ export default function Home() {
   const [longTerm, setLongTerm] = useState([]);
   const [logs, setLogs] = useState();
   async function updateLists() {
-    const todos = await getAllTodosServer();
-    const completed = await getAllCompletedServer();
-    let longTerm = await getAllLongTermRecords();
-    const logs = await getAllDailyLogs();
-    longTerm = longTerm.sort((a, b) => (a.date - b.date));
+    const [todos, completed, longTerm, logs] = await Promise.all([
+      getAllTodosServer(), getAllCompletedServer(), getAllLongTermRecords(), getAllDailyLogs()
+    ]);
+    const sortedLongTerm = longTerm.sort((a, b) => (a.date - b.date));
     setTodos(todos);
     setCompleted(completed);
-    setLongTerm(longTerm);
-    console.log(logs)
+    setLongTerm(sortedLongTerm);
     setLogs(logs);
 
   }
@@ -35,7 +33,7 @@ export default function Home() {
         <Flex justify={'center'}>
           <PointsGraph completed={completed} />
         </Flex>
-        <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr" }} gap={10}>
+        <Grid templateColumns={{ "base": "1fr", "lg": "2fr 1fr" }} gap={10}>
           <GridItem>
             <Todo todos={todos} completed={completed} updateLists={updateLists} />
           </GridItem>

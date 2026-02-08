@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import PieChart from "./pieChart";
-import { Input, Button, Text, Flex, Stack } from "@chakra-ui/react";
+import { Input, Button, Text, Flex, Stack, Grid } from "@chakra-ui/react";
 import { addLongTermRecord } from "./todoServerFuncs";
 
 function LongTermPie({ longTerm, title, name, target, start }) {
@@ -27,12 +27,15 @@ function LongTermPie({ longTerm, title, name, target, start }) {
 }
 export default function LongTerms({ longTerm }) {
   return (
-    <Flex justify={'center'} gap={10}>
-      <LongTermPie longTerm={longTerm} name={'balance'} title={'Money'} target={10000} start={0} />
-      <LongTermPie longTerm={longTerm} name={'weight'} title={'Weight'} target={75} start={87} />
-      <LongTermPie longTerm={longTerm} name={'pull'} title={'Pull'} target={10} start={0} />
-      <LongTermPie longTerm={longTerm} name={'bench'} title={'Bench'} target={80} start={40} />
-      <LongTermPie longTerm={longTerm} name={'run'} title={'Run'} target={25} start={40} />
+    <Flex justify={'center'} >
+      <Grid gridTemplateColumns={{ "base": "1fr 1fr", "sm": "1fr 1fr 1fr", "md": "1fr 1fr 1fr 1fr 1fr" }} gap={10}>
+        <LongTermPie longTerm={longTerm} name={'balance'} title={'Money'} target={10000} start={0} />
+        <LongTermPie longTerm={longTerm} name={'weight'} title={'Weight'} target={75} start={87} />
+        <LongTermPie longTerm={longTerm} name={'pull'} title={'Pull'} target={10} start={0} />
+        <LongTermPie longTerm={longTerm} name={'bench'} title={'Bench'} target={80} start={40} />
+        <LongTermPie longTerm={longTerm} name={'run'} title={'Run'} target={25} start={40} />
+        <LongTermPie longTerm={longTerm} name={'read'} title={'Reading'} target={300} start={0} />
+      </Grid>
     </Flex>
   )
 }
