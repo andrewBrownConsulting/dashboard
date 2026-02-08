@@ -20,8 +20,9 @@ export default function ViewAll() {
         <Header />
         <Text>Here is the list of todo items</Text>
         <List.Root>
-          {completedItems?.map((item) => (<List.Item>{item.name} - {item.score} - {formatDateDDMMYY(item.date)}
-          </List.Item>))}
+          {completedItems?.map((item) => (
+            <List.Item key={item.id}>{item.name} - {item.score} - {formatDateDDMMYY(item.date)}
+            </List.Item>))}
         </List.Root>
       </Stack>
     </Flex>

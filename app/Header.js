@@ -5,6 +5,7 @@ export default function Header() {
     <Flex justify={'center'} gap={10}>
       <Link href={'/'}><Heading size={'2xl'}>Andrew Todo</Heading></Link>
       <Link href={'/all'}><Heading size={'xl'}>View All</Heading></Link>
+      <Link href={'/logs'}><Heading size={'xl'}>Logs</Heading></Link>
     </Flex>
   )
 }

@@ -4,27 +4,34 @@ import { Stack, Grid, Flex, GridItem } from "@chakra-ui/react"
 import PointsGraph from "./pointsGraph";
 import Todo from "./todo"
 import LogoItems from "./logoItems";
-import { getAllCompletedServer, getAllLongTermRecords, getAllTodosServer } from "./todoServerFuncs";
+import { getAllCompletedServer, getAllDailyLogs, getAllLongTermRecords, getAllTodosServer } from "./todoServerFuncs";
 import Header from "./Header";
 import LongTerms from "./longTerms";
+import DailyLog from "./components/dailyLog";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [longTerm, setLongTerm] = useState([]);
+  const [logs, setLogs] = useState();
   async function updateLists() {
     const todos = await getAllTodosServer();
     const completed = await getAllCompletedServer();
     let longTerm = await getAllLongTermRecords();
+    const logs = await getAllDailyLogs();
     longTerm = longTerm.sort((a, b) => (a.date - b.date));
     setTodos(todos);
     setCompleted(completed);
     setLongTerm(longTerm);
+    console.log(logs)
+    setLogs(logs);
+
   }
   return (
     <Flex justify="center" >
       <Stack direction={'column'} maxW="1000" gap={10} >
         <Header />
+        <DailyLog logs={logs} />
         <Flex justify={'center'}>
           <PointsGraph completed={completed} />
         </Flex>

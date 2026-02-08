@@ -14,6 +14,12 @@ export async function deleteTodoServer(id) {
   const todo = db.collection("todo")
   await todo.deleteOne({ _id: new ObjectId(id) });
 }
+export async function updateTodoServer(id, name, score, info) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const todo = db.collection("todo")
+  await todo.updateOne({ _id: new ObjectId(id) }, { $set: { name, score, info } });
+}
 export async function getAllTodosServer() {
   await client.connect();
   const db = client.db("dashboarddb");
@@ -49,7 +55,12 @@ export async function undoCompleteTodoServer(id) {
   const task = await completed.findOne({ _id: new ObjectId(id) });
   await todo.insertOne({ ...task, date: date });
   await completed.deleteOne({ _id: new ObjectId(id) });
-
+}
+export async function updateCompleteServer(id, name, score, info) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const completed = db.collection("completed")
+  await completed.updateOne({ _id: new ObjectId(id) }, { $set: { name, score, info } });
 }
 export async function getAllCompletedServer() {
   await client.connect();
@@ -91,3 +102,18 @@ export async function getAllLongTermRecords() {
     { id: val._id.toString(), name: val.name, score: val.score, date: val.date }))
   return longTermArray;
 }
+export async function submitDailyLog(date, log) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const logs = db.collection("logs")
+  await logs.insertOne({ log, date });
+}
+export async function getAllDailyLogs() {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const logs = db.collection("logs")
+  let logArray = await logs.find({}).toArray();
+  logArray = logArray.map(val => (
+    { id: val._id.toString(), log: val.log, date: val.date }))
+  return logArray;
+} 
