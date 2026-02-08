@@ -108,6 +108,12 @@ export async function submitDailyLog(date, log) {
   const logs = db.collection("logs")
   await logs.insertOne({ log, date });
 }
+export async function updateDailyLog(id, log) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const logs = db.collection("logs")
+  await logs.updateOne({ _id: new ObjectId(id) }, { $set: { log } });
+}
 export async function getAllDailyLogs() {
   await client.connect();
   const db = client.db("dashboarddb");

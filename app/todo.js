@@ -2,10 +2,11 @@
 
 import { Input, Grid, GridItem, Button, Heading, Box, List, Stack, Flex, Text } from "@chakra-ui/react"
 import { CheckIcon } from "@chakra-ui/icons";
-
 import { updateTodoServer, undoCompleteTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, updateCompleteServer, addTodoServer } from "./todoServerFuncs";
 import { useState, useEffect } from "react";
 
+const columnTemplate = "1fr 2fr 1fr 2fr 1fr 1fr";
+const gap = 1;
 function isToday(date) {
   const d = new Date(date);
   const today = new Date();
@@ -47,7 +48,7 @@ function TodoListItem({ listItem, updateLists }) {
   }
   if (editing)
     return (
-      <Grid templateColumns={"40px 100px 40px 330px 20px "} gap={2} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
+      <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
         <GridItem>-</GridItem>
         <GridItem align={'center'}><Input p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
         <GridItem align={'center'}><Input p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
@@ -56,7 +57,7 @@ function TodoListItem({ listItem, updateLists }) {
       </Grid>
     )
   return (
-    <Grid templateColumns={"40px 100px 40px 330px 20px 1fr"} gap={2} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
+    <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
       <GridItem align={'center'} px={2}  >
         <Box
           boxSize="20px"
@@ -92,12 +93,15 @@ function TodoListItem({ listItem, updateLists }) {
   )
 }
 export default function Todo({ todos, completed, updateLists }) {
-  const [name, setName] = useState();
-  const [score, setScore] = useState();
-  const [info, setInfo] = useState();
+  const [name, setName] = useState("");
+  const [score, setScore] = useState("");
+  const [info, setInfo] = useState("");
   async function addNewTodo() {
     await addTodoServer(name, score, info);
     updateLists();
+    setName("");
+    setScore("");
+    setInfo("");
   }
   useEffect(() => {
     updateLists();
@@ -116,11 +120,11 @@ export default function Todo({ todos, completed, updateLists }) {
             <TodoListItem listItem={listItem} updateLists={updateLists} />
           ))
         }
-        <Grid templateColumns={"40px 100px 40px 330px 20px "} gap={2}>
+        <Grid templateColumns={columnTemplate} gap={gap}>
           <GridItem>-</GridItem>
-          <GridItem align={'center'}><Input p={0} m={0} defaultValue={name} onChange={e => setName(e.target.value)} /></GridItem >
-          <GridItem align={'center'}><Input p={0} m={0} defaultValue={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
-          <GridItem align={'center'}><Input p={0} m={0} defaultValue={info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Input p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
+          <GridItem align={'center'}><Input p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Input p={0} m={0} value={info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
           <GridItem align={'center'}><Button onClick={() => addNewTodo()}>Add</Button></GridItem>
         </Grid>
       </List.Root >
