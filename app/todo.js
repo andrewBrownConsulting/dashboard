@@ -1,11 +1,11 @@
 'use client'
 
-import { Input, Grid, GridItem, Heading, Box, List, Stack, Flex, Text } from "@chakra-ui/react"
+import { Input, Grid, GridItem, Heading, Box, Button, Flex, Text } from "@chakra-ui/react"
 import { CheckIcon } from "@chakra-ui/icons";
 import { updateTodoServer, undoCompleteTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, updateCompleteServer, addTodoServer } from "./todoServerFuncs";
 import { useState, useEffect } from "react";
 
-const columnTemplate = "25px 2fr 1fr 2fr 30px 30px";
+const columnTemplate = "25px 1fr 50px 2fr 30px 30px";
 const gap = 1;
 function isToday(date) {
   const d = new Date(date);
@@ -48,48 +48,59 @@ function TodoListItem({ listItem, updateLists }) {
   }
   if (editing)
     return (
-      <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
-        <GridItem>-</GridItem>
-        <GridItem align={'center'}><Input p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
-        <GridItem align={'center'}><Input p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
-        <GridItem align={'center'}><Input p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
-        <GridItem align={'center'}><Text onClick={() => updateTodo(listItem)}>Tick</Text></GridItem>
-      </Grid>
+      <>
+        <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
+          <GridItem>-</GridItem>
+          <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
+          <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Text onClick={() => updateTodo(listItem)} style={{ cursor: "pointer" }}>✅</Text></GridItem>
+        </Grid >
+        <Box width={"100%"} height={"1px"} background="gray.500"></Box>
+      </>
     )
   return (
-    <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
-      <GridItem align={'center'} px={2}  >
-        <Box
-          boxSize="20px"
-          bg="green.500"
-          borderRadius="full"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          onClick={listItem.completed ?
-            () => undoCompleteTodo(listItem.id) :
-            () => completeTodo(listItem.id)
-          }
-        >
-          <CheckIcon color="white" boxSize="12px" />
-        </Box>
-      </GridItem>
-      <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
-      <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
-      <GridItem align={'center'} ><Text >{listItem.info}</Text></GridItem>
-      <GridItem align={'center'} >
-        <Text onClick={() => setEditing(true)} background={'none'}>✏️</Text>
-      </GridItem>
-      <GridItem align={'center'} >
-        <Text
-          onClick={
-            listItem.completed ?
-              () => deleteCompleted(listItem.id) :
-              () => deleteTodo(listItem.id)
-          }
-          background={'none'}>❌</Text>
-      </GridItem>
-    </Grid>
+    <>
+      <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
+        <GridItem align={'center'} px={2}  >
+          <Box
+            boxSize="20px"
+            bg={listItem.completed ? "green.500" : ""}
+            borderRadius="full"
+            borderWidth={"1px"}
+            borderColor={"gray.500"}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            onClick={listItem.completed ?
+              () => undoCompleteTodo(listItem.id) :
+              () => completeTodo(listItem.id)
+            }
+            style={{ cursor: "pointer" }}
+          >
+            <CheckIcon color="white" boxSize="12px" />
+          </Box>
+        </GridItem>
+        <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
+        <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
+        <GridItem align={'center'} ><Text >{listItem.info}</Text></GridItem>
+        <GridItem align={'center'} >
+          <Text onClick={() => setEditing(true)} style={{ cursor: "pointer" }} background={'none'}>✏️</Text>
+        </GridItem>
+        <GridItem align={'center'} >
+          <Text
+            onClick={
+              listItem.completed ?
+                () => deleteCompleted(listItem.id) :
+                () => deleteTodo(listItem.id)
+
+            }
+            style={{ cursor: "pointer" }}
+            background={'none'}>❌</Text>
+        </GridItem>
+      </Grid>
+      <Box width={"100%"} height={"1px"} background="gray.500"></Box>
+    </>
   )
 }
 export default function Todo({ todos, completed, updateLists }) {
@@ -110,24 +121,22 @@ export default function Todo({ todos, completed, updateLists }) {
   //combine todos with completedToday
   const combinedList = completedToday.concat(todos);
   return (
-    <Flex justify={'center'}>
-      <List.Root borderWidth={1} borderColor={"white"} borderRadius={10}>
-        <Flex>
-          <Heading px={2}>To Do:</Heading>
-        </Flex>
-        {
-          combinedList.map((listItem) => (
-            <TodoListItem listItem={listItem} updateLists={updateLists} />
-          ))
-        }
-        <Grid templateColumns={columnTemplate} gap={gap}>
-          <GridItem>-</GridItem>
-          <GridItem align={'center'}><Input p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
-          <GridItem align={'center'}><Input p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
-          <GridItem align={'center'}><Input p={0} m={0} value={info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
-          <GridItem align={'center'}><Text onClick={() => addNewTodo()}>Add</Text></GridItem>
-        </Grid>
-      </List.Root >
+    <Flex justify={'center'} width={"100%"} p={5} flexDir={'column'} borderWidth={1} borderColor={"white"} borderRadius={10} >
+      <Flex>
+        <Heading px={2}>To Do:</Heading>
+      </Flex>
+      {
+        combinedList.map((listItem) => (
+          <TodoListItem listItem={listItem} updateLists={updateLists} />
+        ))
+      }
+      <Grid templateColumns={columnTemplate} gap={gap}>
+        <GridItem>-</GridItem>
+        <GridItem align={'center'}><Input h="28px" p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
+        <GridItem align={'center'}><Input h="28px" p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
+        <GridItem align={'center'}><Input h="28px" p={0} m={0} value={info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
+        <GridItem align={'center'}><Button h="28px" p={0} m={0} bg={'none'} onClick={() => addNewTodo()}>✅</Button></GridItem>
+      </Grid>
     </Flex >
 
   );

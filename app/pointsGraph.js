@@ -1,9 +1,9 @@
 'use client'
 import * as d3 from 'd3'
 import { useState, useEffect } from 'react'
-let height = 200;
-let width = 1000;
 export default function PointsGraph({ completed }) {
+  const [width, setWidth] = useState(1000)
+  const [height, setHeight] = useState(200)
   const [dailyScores, setDailyScores] = useState([]);
   function daysSinceJan1(date) {
     const d = new Date(date);
@@ -16,8 +16,7 @@ export default function PointsGraph({ completed }) {
     d.setDate(d.getDate() + days);
     return d;
   }
-  useEffect(() => {
-    width = Math.min(1000, window.innerWidth);
+  function setScores() {
     const dateScores = completed.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
     const dayScores = Object.values(dateScores.reduce((acc, { date, score }) => {
       if (!acc[date]) acc[date] = { date, score: 0 };
@@ -25,6 +24,10 @@ export default function PointsGraph({ completed }) {
       return acc;
     }, {}))
     setDailyScores(dayScores);
+  }
+
+  useEffect(() => {
+    setScores();
   }, [completed]);
 
   const margin = 25;
@@ -106,7 +109,7 @@ export default function PointsGraph({ completed }) {
       .attr('stroke', 'white')
       .attr('stroke-width', 4)
       .attr('d', line)  // initial path
-  }, [dailyScores])
+  }, [dailyScores, width])
 
   return (
     <svg id="chart" />
