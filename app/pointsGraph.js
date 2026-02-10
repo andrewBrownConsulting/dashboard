@@ -2,8 +2,6 @@
 import * as d3 from 'd3'
 import { useState, useEffect } from 'react'
 export default function PointsGraph({ completed }) {
-  const [width, setWidth] = useState(1000)
-  const [height, setHeight] = useState(200)
   const [dailyScores, setDailyScores] = useState([]);
   function daysSinceJan1(date) {
     const d = new Date(date);
@@ -35,6 +33,8 @@ export default function PointsGraph({ completed }) {
   useEffect(() => {
     if (dailyScores.length == 0)
       return
+    const width = Math.min(window.innerWidth, 1000);
+    const height = 200;
     const scores = dailyScores.map(val => val.score);
     const dates = dailyScores.map(val => val.date);
 
@@ -109,7 +109,7 @@ export default function PointsGraph({ completed }) {
       .attr('stroke', 'white')
       .attr('stroke-width', 4)
       .attr('d', line)  // initial path
-  }, [dailyScores, width])
+  }, [dailyScores])
 
   return (
     <svg id="chart" />
