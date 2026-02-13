@@ -1,6 +1,6 @@
 'use client'
 
-import { Input, Grid, GridItem, Heading, Box, Button, Flex, Text } from "@chakra-ui/react"
+import { Spinner, Input, Grid, GridItem, Heading, Box, Button, Flex, Text } from "@chakra-ui/react"
 import { CheckIcon } from "@chakra-ui/icons";
 import { updateTodoServer, undoCompleteTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, updateCompleteServer, addTodoServer } from "./todoServerFuncs";
 import { useState, useEffect } from "react";
@@ -21,30 +21,42 @@ function TodoListItem({ listItem, updateLists }) {
   const [name, setName] = useState(listItem.name);
   const [score, setScore] = useState(listItem.score);
   const [info, setInfo] = useState(listItem.info);
+  const [submitting, setSubmitting] = useState(false);
+
   async function deleteCompleted(id) {
+    setSubmitting(true);
     await deletedCompletedId(id);
     updateLists();
+    setSubmitting(false);
   }
   async function deleteTodo(id) {
+    setSubmitting(true);
     await deleteTodoServer(id);
     updateLists();
+    setSubmitting(false);
   }
   async function completeTodo(id) {
+    setSubmitting(true);
     listItem.completed = true;
     await completeTodoServer(id);
     updateLists();
+    setSubmitting(false);
   }
   async function undoCompleteTodo(id) {
+    setSubmitting(true);
     await undoCompleteTodoServer(id);
     updateLists();
+    setSubmitting(false);
   }
   async function updateTodo(listItem) {
+    setSubmitting(true);
     if (listItem.completed)
       await updateCompleteServer(listItem.id, name, score, info);
     else
       await updateTodoServer(listItem.id, name, score, info);
     updateLists();
     setEditing(false);
+    setSubmitting(false);
   }
   if (editing)
     return (
@@ -54,7 +66,11 @@ function TodoListItem({ listItem, updateLists }) {
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
-          <GridItem align={'center'}><Text onClick={() => updateTodo(listItem)} style={{ cursor: "pointer" }}>✅</Text></GridItem>
+          <GridItem align={'center'}>
+            {submitting ? <Spinner size="md" /> :
+              <Text onClick={() => updateTodo(listItem)} style={{ cursor: "pointer" }}>✅</Text>
+            }
+          </GridItem>
         </Grid >
         <Box width={"100%"} height={"1px"} background="gray.500"></Box>
       </>
@@ -87,16 +103,18 @@ function TodoListItem({ listItem, updateLists }) {
         <GridItem align={'center'} >
           <Text onClick={() => setEditing(true)} style={{ cursor: "pointer" }} background={'none'}>✏️</Text>
         </GridItem>
-        <GridItem align={'center'} >
-          <Text
-            onClick={
-              listItem.completed ?
-                () => deleteCompleted(listItem.id) :
-                () => deleteTodo(listItem.id)
+        <GridItem align={'center'}>
+          {submitting ? <Spinner size="md" /> :
+            <Text
+              onClick={
+                listItem.completed ?
+                  () => deleteCompleted(listItem.id) :
+                  () => deleteTodo(listItem.id)
 
-            }
-            style={{ cursor: "pointer" }}
-            background={'none'}>❌</Text>
+              }
+              style={{ cursor: "pointer" }}
+              background={'none'}>❌</Text>
+          }
         </GridItem>
       </Grid>
       <Box width={"100%"} height={"1px"} background="gray.500"></Box>
@@ -107,12 +125,15 @@ export default function Todo({ todos, completed, updateLists }) {
   const [name, setName] = useState("");
   const [score, setScore] = useState("");
   const [info, setInfo] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   async function addNewTodo() {
+    setSubmitting(true)
     await addTodoServer(name, score, info);
     updateLists();
     setName("");
     setScore("");
     setInfo("");
+    setSubmitting(false)
   }
   useEffect(() => {
     updateLists();
@@ -135,7 +156,11 @@ export default function Todo({ todos, completed, updateLists }) {
         <GridItem align={'center'}><Input h="28px" p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
         <GridItem align={'center'}><Input h="28px" p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
         <GridItem align={'center'}><Input h="28px" p={0} m={0} value={info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
-        <GridItem align={'center'}><Button h="28px" p={0} m={0} bg={'none'} onClick={() => addNewTodo()}>✅</Button></GridItem>
+        <GridItem align={'center'} colSpan={2}>
+          {submitting ? <Spinner size="md" /> :
+            <Button h="28px" p={0} m={0} bg={'none'} onClick={() => addNewTodo()}>✅</Button>
+          }
+        </GridItem>
       </Grid>
     </Flex >
 
