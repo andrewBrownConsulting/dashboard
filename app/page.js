@@ -41,7 +41,7 @@ export default function Home() {
             <LogoItems updateLists={updateLists} />
           </GridItem>
         </Grid>
-        <LongTerms longTerm={longTerm} />
+        <LongTerms longTerm={longTerm} updateLists={updateLists} />
       </Stack>
     </Flex >
   );
