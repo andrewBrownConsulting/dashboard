@@ -4,7 +4,7 @@ import { addCompleteServer, addTodoServer, } from "./todoServerFuncs";
 import { useState } from "react";
 
 const allOptions = [
-  { value: "NYTimes", score: 2, info: "Complete NYTimes Games" },
+  { value: "NYTimes", score: 1, info: "Complete NYTimes Games" },
   { value: "Go on Date", score: 10 },
   { value: "Go out with Friends ", score: 10 },
 ]
