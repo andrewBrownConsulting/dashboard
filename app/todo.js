@@ -1,6 +1,6 @@
 'use client'
 
-import { Spinner, Input, Grid, GridItem, Heading, Box, Button, Flex, Text } from "@chakra-ui/react"
+import { Spinner, Input, Grid, GridItem, Heading, Box, Button, Flex, Text, Textarea } from "@chakra-ui/react"
 import { CheckIcon } from "@chakra-ui/icons";
 import { updateTodoServer, undoCompleteTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, updateCompleteServer, addTodoServer } from "./todoServerFuncs";
 import { useState, useEffect } from "react";
@@ -65,7 +65,7 @@ function TodoListItem({ listItem, updateLists }) {
           <GridItem>-</GridItem>
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
-          <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Textarea h="28px" p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
           <GridItem align={'center'}>
             {submitting ? <Spinner size="md" /> :
               <Text onClick={() => updateTodo(listItem)} style={{ cursor: "pointer" }}>✅</Text>
@@ -79,23 +79,25 @@ function TodoListItem({ listItem, updateLists }) {
     <>
       <Grid templateColumns={columnTemplate} gap={gap} id={listItem.id} key={listItem.id} textDecoration={listItem.completed && "line-through"}>
         <GridItem align={'center'} px={2}  >
-          <Box
-            boxSize="20px"
-            bg={listItem.completed ? "green.500" : ""}
-            borderRadius="full"
-            borderWidth={"1px"}
-            borderColor={"gray.500"}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            onClick={listItem.completed ?
-              () => undoCompleteTodo(listItem.id) :
-              () => completeTodo(listItem.id)
-            }
-            style={{ cursor: "pointer" }}
-          >
-            <CheckIcon color="white" boxSize="12px" />
-          </Box>
+          {submitting ? <Spinner size="md" /> :
+            <Box
+              boxSize="20px"
+              bg={listItem.completed ? "green.500" : ""}
+              borderRadius="full"
+              borderWidth={"1px"}
+              borderColor={"gray.500"}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              onClick={listItem.completed ?
+                () => undoCompleteTodo(listItem.id) :
+                () => completeTodo(listItem.id)
+              }
+              style={{ cursor: "pointer" }}
+            >
+              <CheckIcon color="white" boxSize="12px" />
+            </Box>
+          }
         </GridItem>
         <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
         <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
@@ -126,7 +128,8 @@ export default function Todo({ todos, completed, updateLists }) {
   const [score, setScore] = useState("");
   const [info, setInfo] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  async function addNewTodo() {
+  async function addNewTodo(e) {
+    e.preventDefault();
     setSubmitting(true)
     await addTodoServer(name, score, info);
     updateLists();
@@ -146,22 +149,23 @@ export default function Todo({ todos, completed, updateLists }) {
       <Flex>
         <Heading px={2}>To Do:</Heading>
       </Flex>
-      {
-        combinedList.map((listItem) => (
-          <TodoListItem listItem={listItem} updateLists={updateLists} />
-        ))
+      {combinedList.map((listItem) => (
+        <TodoListItem key={listItem.id} listItem={listItem} updateLists={updateLists} />
+      ))
       }
-      <Grid templateColumns={columnTemplate} gap={gap}>
-        <GridItem>-</GridItem>
-        <GridItem align={'center'}><Input h="28px" p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
-        <GridItem align={'center'}><Input h="28px" p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
-        <GridItem align={'center'}><Input h="28px" p={0} m={0} value={info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
-        <GridItem align={'center'} colSpan={2}>
-          {submitting ? <Spinner size="md" /> :
-            <Button h="28px" p={0} m={0} bg={'none'} onClick={() => addNewTodo()}>✅</Button>
-          }
-        </GridItem>
-      </Grid>
+      <form onSubmit={addNewTodo}>
+        <Grid templateColumns={columnTemplate} gap={gap}>
+          <GridItem>-</GridItem>
+          <GridItem align={'center'}><Input h="28px" p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
+          <GridItem align={'center'}><Input h="28px" p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Textarea h="28px" p={0} m={0} value={info} resize="vertical" onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'} colSpan={2}>
+            {submitting ? <Spinner size="md" /> :
+              <Button h="28px" p={0} m={0} bg={'none'} type="submit">✅</Button>
+            }
+          </GridItem>
+        </Grid>
+      </form>
     </Flex >
 
   );
