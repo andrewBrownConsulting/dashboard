@@ -1,7 +1,7 @@
 import { addCompleteServer } from '@/app/todoServerFuncs'
 import { NextResponse } from 'next/server'
 
-export async function POST() {
+export async function GET() {
   await addCompleteServer("Wake up at 6am", 10, "");
   await addCompleteServer("Meditate", 1, "8am");
   await addCompleteServer("Work 9 to 5", 10, "");
