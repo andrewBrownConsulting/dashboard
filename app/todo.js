@@ -26,26 +26,26 @@ function TodoListItem({ listItem, updateLists }) {
   async function deleteCompleted(id) {
     setSubmitting(true);
     await deletedCompletedId(id);
-    updateLists();
+    await updateLists();
     setSubmitting(false);
   }
   async function deleteTodo(id) {
     setSubmitting(true);
     await deleteTodoServer(id);
-    updateLists();
+    await updateLists();
     setSubmitting(false);
   }
   async function completeTodo(id) {
     setSubmitting(true);
     listItem.completed = true;
     await completeTodoServer(id);
-    updateLists();
+    await updateLists();
     setSubmitting(false);
   }
   async function undoCompleteTodo(id) {
     setSubmitting(true);
     await undoCompleteTodoServer(id);
-    updateLists();
+    await updateLists();
     setSubmitting(false);
   }
   async function updateTodo(listItem) {
@@ -54,7 +54,7 @@ function TodoListItem({ listItem, updateLists }) {
       await updateCompleteServer(listItem.id, name, score, info);
     else
       await updateTodoServer(listItem.id, name, score, info);
-    updateLists();
+    await updateLists();
     setEditing(false);
     setSubmitting(false);
   }
@@ -132,7 +132,7 @@ export default function Todo({ todos, completed, updateLists }) {
     e.preventDefault();
     setSubmitting(true)
     await addTodoServer(name, score, info);
-    updateLists();
+    await updateLists();
     setName("");
     setScore("");
     setInfo("");

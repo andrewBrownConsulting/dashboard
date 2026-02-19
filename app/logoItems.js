@@ -1,36 +1,41 @@
 'use client'
-import { Grid, Flex, GridItem, Button, Box, Heading, Select, Portal, createListCollection, Input, Stack } from "@chakra-ui/react"
+import { Grid, Flex, GridItem, Button, Heading, Stack, Spinner } from "@chakra-ui/react"
 import { addCompleteServer, addTodoServer, } from "./todoServerFuncs";
 import { useState } from "react";
 
 const allOptions = [
-  { value: "NYTimes", score: 1, info: "Complete NYTimes Games" },
-  { value: "Go on Date", score: 10 },
-  { value: "Go out with Friends ", score: 10 },
+  { name: "NYTimes", score: 1, info: "Complete NYTimes Games" },
+  { name: "Go on Date", score: 10 },
+  { name: "Go out with Friends ", score: 10 },
 ]
-export default function LogoItems({ updateLists }) {
+function LogoItem({ name, score, info, updateLists }) {
+  const [sending, setSending] = useState(false);
   async function addLogoTodo(name, score, info) {
-    addCompleteServer(name, score, info)
-    updateLists();
+    setSending(true);
+    await addCompleteServer(name, score, info)
+    await updateLists();
+    setSending(false);
   }
-  const logoItem = (name, options) => (
-    <GridItem width={300} background={"black"} color='white' textAlign={'center'}
-      borderRadius={'lg'}  >
-      <Grid templateColumns='1fr 1fr' gap={2}>
-        <GridItem colSpan={2} p={1} height={10}>
-          <Heading >{name}</Heading>
-        </GridItem>
-        {
-          options.map((val, i) => <Button key={i} id={val.name} height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(val.value, val.score, val.info)} p={2} > {val.value}</Button>)
-        }
-      </Grid>
+  return (
+    <GridItem key={name} width={300} background={"black"} color='white' textAlign={'center'} borderRadius={'lg'}  >
+      {sending ?
+        <Spinner size={'lg'} /> :
+        <Button width={200} key={name} id={name} height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(name, score, info)} p={2} >
+          {name}
+        </Button>
+      }
     </GridItem >
   )
+}
+export default function LogoItems({ updateLists }) {
   return (
     <Flex justify={'center'}>
-      <Stack direction={"row"}>
-        {logoItem("Quick Options", allOptions)}
-      </Stack>
+      <Grid templateColumns='1fr' gap={2}>
+        <GridItem p={1} height={10}>
+          <Heading textAlign={'center'}>Quick Options</Heading>
+        </GridItem>
+        {allOptions.map((val, i) => (<LogoItem name={val.name} score={val.score} info={val.info} updateLists={updateLists} />))}
+      </Grid>
     </Flex>
   )
 }

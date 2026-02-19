@@ -33,11 +33,11 @@ export default function Home() {
         <Flex justify={'center'}>
           <PointsGraph completed={completed} />
         </Flex>
-        <Grid templateColumns={{ "base": "1fr", "lg": "2fr 1fr" }} gap={10}>
-          <GridItem>
+        <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr 1fr" }} gap={10}>
+          <GridItem colSpan={{ "base": 1, "lg": 2 }}>
             <Todo todos={todos} completed={completed} updateLists={updateLists} />
           </GridItem>
-          <GridItem>
+          <GridItem colSpan={1}>
             <LogoItems updateLists={updateLists} />
           </GridItem>
         </Grid>
