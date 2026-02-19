@@ -1,0 +1,14 @@
+name: Call Vercel Cron Endpoint
+
+on:
+  schedule:
+    - cron: "53 22 * * *" # 06:00 UTC daily
+  workflow_dispatch: # allows manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call API
+        run: |
+          curl -X GET https://dashboard-dusky-six-58.vercel.app/api/cron
