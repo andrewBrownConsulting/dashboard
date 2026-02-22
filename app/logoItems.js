@@ -20,7 +20,7 @@ function LogoItem({ name, score, info, updateLists }) {
     <GridItem key={name} width={300} background={"black"} color='white' textAlign={'center'} borderRadius={'lg'}  >
       {sending ?
         <Spinner size={'lg'} /> :
-        <Button width={200} key={name} id={name} height={10} background={"white"} colour={'black'} onClick={() => addLogoTodo(name, score, info)} p={2} >
+        <Button width={200} key={name} id={name} height={10} background={"white"} color={'black'} onClick={() => addLogoTodo(name, score, info)} p={2} >
           {name}
         </Button>
       }
@@ -34,7 +34,7 @@ export default function LogoItems({ updateLists }) {
         <GridItem p={1} height={10}>
           <Heading textAlign={'center'}>Quick Options</Heading>
         </GridItem>
-        {allOptions.map((val, i) => (<LogoItem name={val.name} score={val.score} info={val.info} updateLists={updateLists} />))}
+        {allOptions.map((val, i) => (<LogoItem key={i} name={val.name} score={val.score} info={val.info} updateLists={updateLists} />))}
       </Grid>
     </Flex>
   )

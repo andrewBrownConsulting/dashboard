@@ -1,7 +1,7 @@
 'use client'
 import * as d3 from 'd3'
 import { useState, useEffect } from 'react'
-export default function PointsGraph({ completed }) {
+export default function PointsGraph({ completed, last30Bool }) {
   const [dailyScores, setDailyScores] = useState([]);
   function daysSinceJan1(date) {
     const d = new Date(date);
@@ -15,7 +15,14 @@ export default function PointsGraph({ completed }) {
     return d;
   }
   function setScores() {
-    const dateScores = completed.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
+    const now = new Date();
+    const thirtyDaysAgo = new Date().setDate(now.getDate() - 30);
+    let filteredCompleted = completed;
+    let dateScores = filteredCompleted.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
+    if (last30Bool) {
+      filteredCompleted = completed.filter(item => (item.date >= thirtyDaysAgo))
+      dateScores = filteredCompleted.map((val) => ({ date: daysSinceJan1(val.date) - daysSinceJan1(filteredCompleted[0].date), score: Number(val.score) }))
+    }
     const dayScores = Object.values(dateScores.reduce((acc, { date, score }) => {
       if (!acc[date]) acc[date] = { date, score: 0 };
       acc[date].score += score;
@@ -26,15 +33,20 @@ export default function PointsGraph({ completed }) {
 
   useEffect(() => {
     setScores();
-  }, [completed]);
+  }, [completed, last30Bool]);
 
   const margin = 25;
 
   useEffect(() => {
-    if (dailyScores.length == 0)
-      return
     const width = Math.min(window.innerWidth, 1000);
     const height = 200;
+
+    const svg = d3.select('#chart');
+    svg.selectAll('g').remove();
+    svg.attr('width', width);
+    svg.attr('height', height);
+    if (dailyScores.length == 0)
+      return
     const scores = dailyScores.map(val => val.score);
     const dates = dailyScores.map(val => val.date);
 
@@ -50,10 +62,6 @@ export default function PointsGraph({ completed }) {
       .domain([0, maxScore])
       .range([height - margin, margin]);
 
-    const svg = d3.select('#chart');
-    svg.selectAll('g').remove();
-    svg.attr('width', width);
-    svg.attr('height', height);
 
     const xAxis = d3.axisBottom(xScale).ticks(10)
     const yAxis = d3.axisLeft(yScale).ticks(5)

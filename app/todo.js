@@ -66,7 +66,7 @@ function TodoListItem({ listItem, updateLists }) {
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
           <GridItem align={'center'}><Textarea h="28px" p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
-          <GridItem align={'center'}>
+          <GridItem align={'center'} colSpan={2}>
             {submitting ? <Spinner size="md" /> :
               <Text onClick={() => updateTodo(listItem)} style={{ cursor: "pointer" }}>✅</Text>
             }
@@ -138,18 +138,21 @@ export default function Todo({ todos, completed, updateLists }) {
     setInfo("");
     setSubmitting(false)
   }
-  useEffect(() => {
-    updateLists();
-  }, [])
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      addNewTodo(e);
+    }
+  }
   const completedToday = completed.filter(item => isToday(item.date)).map(item => ({ ...item, completed: true }));
-  //combine todos with completedToday
   const combinedList = completedToday.concat(todos);
   return (
     <Flex justify={'center'} width={"100%"} p={5} flexDir={'column'} borderWidth={1} borderColor={"white"} borderRadius={10} >
       <Flex>
         <Heading px={2}>To Do:</Heading>
       </Flex>
-      {combinedList.map((listItem) => (
+      {combinedList?.map((listItem) => (
         <TodoListItem key={listItem.id} listItem={listItem} updateLists={updateLists} />
       ))
       }
@@ -158,7 +161,7 @@ export default function Todo({ todos, completed, updateLists }) {
           <GridItem>-</GridItem>
           <GridItem align={'center'}><Input h="28px" p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
           <GridItem align={'center'}><Input h="28px" p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
-          <GridItem align={'center'}><Textarea h="28px" p={0} m={0} value={info} resize="vertical" onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Textarea h="28px" p={0} m={0} value={info} resize="vertical" onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => setInfo(e.target.value)} /></GridItem>
           <GridItem align={'center'} colSpan={2}>
             {submitting ? <Spinner size="md" /> :
               <Button h="28px" p={0} m={0} bg={'none'} type="submit">✅</Button>

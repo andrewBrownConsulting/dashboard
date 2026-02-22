@@ -122,4 +122,25 @@ export async function getAllDailyLogs() {
   logArray = logArray.map(val => (
     { id: val._id.toString(), log: val.log, date: val.date }))
   return logArray;
-} 
+}
+export async function addBook(title) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const books = db.collection("books")
+  await books.insertOne({ title });
+}
+export async function getAllBooks() {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const books = db.collection("books")
+  let bookArray = await books.find({}).toArray();
+  bookArray = bookArray.map(val => (
+    { id: val._id.toString(), title: val.title }))
+  return bookArray;
+}
+export async function removeBook(id) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const books = db.collection("books")
+  await books.deleteOne({ _id: new ObjectId(id) });
+}
