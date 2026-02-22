@@ -4,8 +4,9 @@ import { Spinner, Input, Grid, GridItem, Heading, Box, Button, Flex, Text, Texta
 import { CheckIcon } from "@chakra-ui/icons";
 import { updateTodoServer, undoCompleteTodoServer, completeTodoServer, deletedCompletedId, deleteTodoServer, updateCompleteServer, addTodoServer } from "./todoServerFuncs";
 import { useState, useEffect } from "react";
+import { formatDateDDMMYY } from "./utils";
 
-const columnTemplate = "25px 1fr 50px 2fr 30px 30px";
+const columnTemplate = "25px 1fr 50px 2fr 1fr 30px 30px";
 const gap = 1;
 function isToday(date) {
   const d = new Date(date);
@@ -21,6 +22,7 @@ function TodoListItem({ listItem, updateLists }) {
   const [name, setName] = useState(listItem.name);
   const [score, setScore] = useState(listItem.score);
   const [info, setInfo] = useState(listItem.info);
+  const [expiration, setExpiration] = useState(listItem.expiration);
   const [submitting, setSubmitting] = useState(false);
 
   async function deleteCompleted(id) {
@@ -51,9 +53,9 @@ function TodoListItem({ listItem, updateLists }) {
   async function updateTodo(listItem) {
     setSubmitting(true);
     if (listItem.completed)
-      await updateCompleteServer(listItem.id, name, score, info);
+      await updateCompleteServer(listItem.id, name, score, info, expiration);
     else
-      await updateTodoServer(listItem.id, name, score, info);
+      await updateTodoServer(listItem.id, name, score, info, expiration);
     await updateLists();
     setEditing(false);
     setSubmitting(false);
@@ -66,6 +68,7 @@ function TodoListItem({ listItem, updateLists }) {
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.name} onChange={e => setName(e.target.value)} /></GridItem >
           <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
           <GridItem align={'center'}><Textarea h="28px" p={0} m={0} defaultValue={listItem.info} onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'}><Input h="28px" p={0} m={0} defaultValue={listItem.expiration} type="date" onChange={e => setExpiration(e.target.value)} /></GridItem >
           <GridItem align={'center'} colSpan={2}>
             {submitting ? <Spinner size="md" /> :
               <Text onClick={() => updateTodo(listItem)} style={{ cursor: "pointer" }}>✅</Text>
@@ -102,6 +105,8 @@ function TodoListItem({ listItem, updateLists }) {
         <GridItem align={'center'} ><Text>{listItem.name}</Text></GridItem>
         <GridItem align={'center'} ><Text>{listItem.score}</Text></GridItem>
         <GridItem align={'center'} ><Text >{listItem.info}</Text></GridItem>
+
+        <GridItem align={'center'} ><Text >{listItem.expiration ? formatDateDDMMYY(listItem.expiration) : "no expire"}</Text></GridItem>
         <GridItem align={'center'} >
           <Text onClick={() => setEditing(true)} style={{ cursor: "pointer" }} background={'none'}>✏️</Text>
         </GridItem>
@@ -127,15 +132,17 @@ export default function Todo({ todos, completed, updateLists }) {
   const [name, setName] = useState("");
   const [score, setScore] = useState("");
   const [info, setInfo] = useState("");
+  const [expiration, setExpiration] = useState();
   const [submitting, setSubmitting] = useState(false);
   async function addNewTodo(e) {
     e.preventDefault();
     setSubmitting(true)
-    await addTodoServer(name, score, info);
+    await addTodoServer(name, score, info, expiration);
     await updateLists();
     setName("");
     setScore("");
     setInfo("");
+    setExpiration();
     setSubmitting(false)
   }
 
@@ -162,6 +169,10 @@ export default function Todo({ todos, completed, updateLists }) {
           <GridItem align={'center'}><Input h="28px" p={0} m={0} value={name} onChange={e => setName(e.target.value)} /></GridItem >
           <GridItem align={'center'}><Input h="28px" p={0} m={0} value={score} type="number" onChange={(e) => setScore(e.target.value)} /></GridItem>
           <GridItem align={'center'}><Textarea h="28px" p={0} m={0} value={info} resize="vertical" onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => setInfo(e.target.value)} /></GridItem>
+          <GridItem align={'center'}>
+
+            <Input h="28px" p={0} m={0} value={expiration} type="date" onChange={(e) => setExpiration(e.target.value)} />
+          </GridItem>
           <GridItem align={'center'} colSpan={2}>
             {submitting ? <Spinner size="md" /> :
               <Button h="28px" p={0} m={0} bg={'none'} type="submit">✅</Button>

@@ -2,11 +2,11 @@
 import { ObjectId } from "mongodb";
 import client from "./mongoClient";
 
-export async function addTodoServer(name, score, info) {
+export async function addTodoServer(name, score, info, expiration) {
   await client.connect();
   const db = client.db("dashboarddb");
   const todo = db.collection("todo")
-  await todo.insertOne({ name, score, info });
+  await todo.insertOne({ name, score, info, expiration });
 }
 export async function deleteTodoServer(id) {
   await client.connect();
@@ -14,18 +14,18 @@ export async function deleteTodoServer(id) {
   const todo = db.collection("todo")
   await todo.deleteOne({ _id: new ObjectId(id) });
 }
-export async function updateTodoServer(id, name, score, info) {
+export async function updateTodoServer(id, name, score, info, expiration) {
   await client.connect();
   const db = client.db("dashboarddb");
   const todo = db.collection("todo")
-  await todo.updateOne({ _id: new ObjectId(id) }, { $set: { name, score, info } });
+  await todo.updateOne({ _id: new ObjectId(id) }, { $set: { name, score, info, expiration } });
 }
 export async function getAllTodosServer() {
   await client.connect();
   const db = client.db("dashboarddb");
   const todo = db.collection("todo")
   let todoArray = await todo.find({}).toArray();
-  todoArray = todoArray.map(val => ({ id: val._id.toString(), name: val.name, score: val.score, info: val.info }))
+  todoArray = todoArray.map(val => ({ id: val._id.toString(), name: val.name, score: val.score, info: val.info, expiration: val.expiration }))
   return todoArray;
 }
 export async function completeTodoServer(id) {
@@ -38,7 +38,7 @@ export async function completeTodoServer(id) {
   await completed.insertOne({ ...task, date: date });
   await todo.deleteOne({ _id: new ObjectId(id) });
 }
-export async function addCompleteServer(name, score, info) {
+export async function addCompleteServer(name, score, info, expiration) {
   await client.connect();
   const db = client.db("dashboarddb");
   const completed = db.collection("completed")
@@ -56,7 +56,7 @@ export async function undoCompleteTodoServer(id) {
   await todo.insertOne({ ...task, date: date });
   await completed.deleteOne({ _id: new ObjectId(id) });
 }
-export async function updateCompleteServer(id, name, score, info) {
+export async function updateCompleteServer(id, name, score, info, expiration) {
   await client.connect();
   const db = client.db("dashboarddb");
   const completed = db.collection("completed")
@@ -68,7 +68,7 @@ export async function getAllCompletedServer() {
   const completed = db.collection("completed")
   let completedArray = await completed.find({}).toArray();
   completedArray = completedArray.map(val => (
-    { id: val._id.toString(), name: val.name, score: val.score, info: val.info, date: val.date }))
+    { id: val._id.toString(), name: val.name, score: val.score, info: val.info, date: val.date, expiration: val.expiration }))
   return completedArray;
 }
 export async function deletedCompletedId(id) {

@@ -21,7 +21,7 @@ export default function PointsGraph({ completed, last30Bool }) {
     let dateScores = filteredCompleted.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
     if (last30Bool) {
       filteredCompleted = completed.filter(item => (item.date >= thirtyDaysAgo))
-      dateScores = filteredCompleted.map((val) => ({ date: daysSinceJan1(val.date) - daysSinceJan1(filteredCompleted[0].date), score: Number(val.score) }))
+      dateScores = filteredCompleted.map((val) => ({ date: daysSinceJan1(val.date), score: Number(val.score) }))
     }
     const dayScores = Object.values(dateScores.reduce((acc, { date, score }) => {
       if (!acc[date]) acc[date] = { date, score: 0 };
@@ -86,7 +86,7 @@ export default function PointsGraph({ completed, last30Bool }) {
           .attr("class", "info")
           .attr("x", ((xScale(d.date) - width < -200) ? (xScale(d.date) + 20) : (xScale(d.date) - 80)))
           .attr("y", yScale(d.score) - 15)
-          .text(`Score: ${d.score}`)
+          .text(`Score: ${d.score.toFixed(1)}`)
           .attr("font-family", "sans-serif")
           .attr("font-size", "14px")
           .attr("fill", "white")
