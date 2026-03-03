@@ -1,7 +1,7 @@
 'use client'
 import * as d3 from 'd3'
 import { useState, useEffect } from 'react'
-export default function PointsGraph({ completed, last30Bool }) {
+export default function PointsGraph({ completed, last30Bool, sevenAvg }) {
   const [dailyScores, setDailyScores] = useState([]);
   function daysSinceJan1(date) {
     const d = new Date(date);
@@ -116,6 +116,20 @@ export default function PointsGraph({ completed, last30Bool }) {
       .attr('fill', 'none')
       .attr('stroke', 'white')
       .attr('stroke-width', 4)
+      .attr('d', line)  // initial path
+
+    const sevenAvgPath = svg.selectAll('.straightLine')      // Select existing path(s)
+      .data([dailyScores])
+      .join('line')
+      .attr('class', 'straightLine')
+      .attr('x1', margin)
+      .attr('x2', width - margin)
+      .attr('y1', yScale(sevenAvg))
+      .attr('y2', yScale(sevenAvg))
+      .attr('fill', 'none')
+      .attr('stroke', 'red')
+      .attr('stroke-width', 2)
+      .attr("stroke-dasharray", "10,4")
       .attr('d', line)  // initial path
   }, [dailyScores])
 

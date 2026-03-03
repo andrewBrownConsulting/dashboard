@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button } from "@chakra-ui/react";
-export default function Stats({ completed, last30Bool, setLast30Bool }) {
-  const [sevenAvg, setSevenAvg] = useState();
+export default function Stats({ completed, last30Bool, setLast30Bool, sevenAvg, setSevenAvg }) {
   const [thirtyAvg, setThirtyAvg] = useState();
   useEffect(() => {
     if (!completed)

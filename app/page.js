@@ -16,6 +16,7 @@ export default function Home() {
   const [longTerm, setLongTerm] = useState([]);
   const [logs, setLogs] = useState();
   const [last30Bool, setLast30Bool] = useState(false);
+  const [sevenAvg, setSevenAvg] = useState(0);
   async function updateLists() {
     const [todos, completed, longTerm, logs] = await Promise.all([
       getAllTodosServer(), getAllCompletedServer(), getAllLongTermRecords(), getAllDailyLogs()
@@ -36,8 +37,8 @@ export default function Home() {
           <Heading textAlign={"center"} fontSize={'3xl'}>Change of the week: <Text as="span" color="red.500">Record a Vlog</Text> </Heading>
         </Grid>
         <Flex justify={'center'}>
-          <PointsGraph completed={completed} last30Bool={last30Bool} />
-          <Stats completed={completed} last30Bool={last30Bool} setLast30Bool={setLast30Bool} />
+          <PointsGraph completed={completed} last30Bool={last30Bool} sevenAvg={sevenAvg} />
+          <Stats completed={completed} last30Bool={last30Bool} setLast30Bool={setLast30Bool} sevenAvg={sevenAvg} setSevenAvg={setSevenAvg} />
         </Flex>
         <Flex justify={'center'} p={10}>
           <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr 1fr" }}>
