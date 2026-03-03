@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Provider } from "@/components/ui/provider"
+import Providers from "./provider";
 
 export const metadata = {
   title: "Andrew Dashboard",
@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Provider>{children}</Provider>
+        <Providers> {children}</Providers>
       </body>
     </html>
   );

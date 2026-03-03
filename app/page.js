@@ -37,8 +37,16 @@ export default function Home() {
           <Heading textAlign={"center"} fontSize={'3xl'}>Change of the week: <Text as="span" color="red.500">Record a Vlog</Text> </Heading>
         </Grid>
         <Flex justify={'center'}>
-          <PointsGraph completed={completed} last30Bool={last30Bool} sevenAvg={sevenAvg} />
-          <Stats completed={completed} last30Bool={last30Bool} setLast30Bool={setLast30Bool} sevenAvg={sevenAvg} setSevenAvg={setSevenAvg} />
+          <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr 1fr" }} width={'100%'}>
+            <GridItem colSpan={{ "base": 1, "lg": 2 }}>
+              <PointsGraph completed={completed} last30Bool={last30Bool} sevenAvg={sevenAvg} />
+            </GridItem>
+            <GridItem colSpan={1}>
+              <Flex justify={'center'}>
+                <Stats completed={completed} last30Bool={last30Bool} setLast30Bool={setLast30Bool} sevenAvg={sevenAvg} setSevenAvg={setSevenAvg} />
+              </Flex>
+            </GridItem>
+          </Grid>
         </Flex>
         <Flex justify={'center'} p={10}>
           <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr 1fr" }}>
