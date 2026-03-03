@@ -38,7 +38,7 @@ export default function Home() {
         </Grid>
         <Flex justify={'center'}>
           <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr 1fr" }} width={'100%'}>
-            <GridItem colSpan={{ "base": 1, "lg": 2 }}>
+            <GridItem colSpan={{ "base": 1, "lg": 2 }} height={200}>
               <PointsGraph completed={completed} last30Bool={last30Bool} sevenAvg={sevenAvg} />
             </GridItem>
             <GridItem colSpan={1}>

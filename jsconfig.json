@@ -5,7 +5,9 @@
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   }
 }
