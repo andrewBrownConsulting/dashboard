@@ -34,7 +34,7 @@ export default function Home() {
         <Header />
         <Grid justify={'center'} gridTemplateColumns={{ base: "1fr", "md": "1fr 1fr" }}>
           <DailyLog logs={logs} />
-          <Heading textAlign={"center"} fontSize={'3xl'}>Change of the week: <Text as="span" color="red.500">Record a Vlog</Text> </Heading>
+          <Heading textAlign={"center"} fontSize={'3xl'}>Change of the week: <Text as="span" color="red.500">Create a hell-yeah clip each day</Text> </Heading>
         </Grid>
         <Flex justify={'center'}>
           <Grid templateColumns={{ "base": "1fr", "lg": "1fr 1fr 1fr" }} width={'100%'}>
