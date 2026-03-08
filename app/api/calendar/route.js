@@ -1,10 +1,10 @@
-import { addCompleteServer } from '@/app/todoServerFuncs'
+import { addCompleteServer, addTodoServer } from '@/app/todoServerFuncs'
 import { NextResponse } from 'next/server'
 
 export async function POST(req) {
   try {
     const { name, info, score } = await req.json();
-    await addCompleteServer(name, score, info);
+    await addTodoServer(name, score, info);
     return NextResponse.json({ message: 'Added calendar to today' })
   } catch (e) {
     return new Response(
