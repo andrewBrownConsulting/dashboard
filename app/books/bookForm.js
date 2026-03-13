@@ -15,7 +15,6 @@ export function AddBookForm() {
 export function BookListing({ id, title }) {
   return (
     <form>
-      <List.Item >{title} <Button onClick={() => { removeBook(id) }}>x</Button> </List.Item>
     </form>
   )
 }

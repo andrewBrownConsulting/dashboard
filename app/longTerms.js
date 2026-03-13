@@ -72,13 +72,12 @@ function LongTermPie({ longTerm, title, name, target, start, updateLists }) {
 export default function LongTerms({ longTerm, updateLists }) {
   return (
     <Flex justify={'center'} >
-      <Grid gridTemplateColumns={{ "base": "1fr 1fr", "sm": "1fr 1fr 1fr", "md": "1fr 1fr 1fr 1fr 1fr" }} gap={10}>
+      <Grid gridTemplateColumns={{ "base": "1fr 1fr", "md": "1fr 1fr 1fr 1fr 1fr" }} gap={10}>
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'balance'} title={'Money'} target={10000} start={0} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'weight'} title={'Weight'} target={75} start={87} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'pull'} title={'Pull'} target={10} start={0} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'bench'} title={'Bench'} target={80} start={40} />
-        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'run'} title={'Run'} target={25} start={40} />
-        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'read'} title={'Reading'} target={300} start={0} />
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'run'} title={'Run'} target={30} start={5} />
       </Grid>
     </Flex>
   )
