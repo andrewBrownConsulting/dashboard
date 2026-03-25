@@ -77,7 +77,7 @@ export default function LongTerms({ longTerm, updateLists }) {
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'weight'} title={'Weight'} target={75} start={87} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'pull'} title={'Pull'} target={10} start={0} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'bench'} title={'Bench'} target={80} start={40} />
-        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'run'} title={'Run'} target={30} start={5} />
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'run'} title={'Run'} target={15} start={8} />
       </Grid>
     </Flex>
   )
