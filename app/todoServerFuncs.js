@@ -144,3 +144,25 @@ export async function removeBook(id) {
   const books = db.collection("books")
   await books.deleteOne({ _id: new ObjectId(id) });
 }
+
+export async function addBuyItem(title) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const buyItems = db.collection("buyItems")
+  await buyItems.insertOne({ title });
+}
+export async function getAllBuyItems() {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const buyItems = db.collection("buyItems")
+  let bookArray = await buyItems.find({}).toArray();
+  bookArray = bookArray.map(val => (
+    { id: val._id.toString(), title: val.title }))
+  return bookArray;
+}
+export async function removeBuyItem(id) {
+  await client.connect();
+  const db = client.db("dashboarddb");
+  const buyItems = db.collection("buyItems")
+  await buyItems.deleteOne({ _id: new ObjectId(id) });
+}
