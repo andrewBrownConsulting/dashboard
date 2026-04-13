@@ -1,0 +1,10 @@
+{
+  "name": "n8n Codespace",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [
+    5678
+  ]
+}
