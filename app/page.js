@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => { updateLists() }, [])
   return (
     <Flex justify="center" >
-      <Stack direction={'column'} maxW="1000" gap={10} >
+      <Stack direction={'column'} maxW="1000" width={"100%"} gap={10} >
         <Header />
         <Grid justify={'center'} gridTemplateColumns={{ base: "1fr", "md": "1fr 1fr" }}>
           <DailyLog logs={logs} />

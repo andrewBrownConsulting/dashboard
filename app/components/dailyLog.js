@@ -29,12 +29,13 @@ export default function DailyLog({ logs }) {
     setSending(false);
   }
   return (
-    <Flex justify={'center'} gap={10}>
+    <Flex justify={'center'} flexDir={'column'} p={5}>
       <Textarea type="text" placeholder="What did you do today?" value={log.log} onChange={e => setLog({ ...log, log: e.target.value })} />
-      {sending ?
-        <Spinner size={'lg'} /> :
-        <Button onClick={() => SubmitLog()}>Submit</Button>
-      }
+      <Flex justify={'center'}>
+        {sending ?
+          <Spinner size={'lg'} /> :
+          <Button onClick={() => SubmitLog()}>Submit</Button>
+        }</Flex>
     </Flex>
   )
 }
