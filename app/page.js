@@ -6,7 +6,7 @@ import Todo from "./todo"
 import LogoItems from "./logoItems";
 import { getAllCompletedServer, getAllDailyLogs, getAllLongTermRecords, getAllTodosServer } from "./todoServerFuncs";
 import Header from "./Header";
-import LongTerms from "./longTerms";
+import { LongTerms, CompactLongTerms } from "./longTerms";
 import DailyLog from "./components/dailyLog";
 import Stats from "./stats"
 
@@ -43,7 +43,8 @@ export default function Home() {
             </GridItem>
             <GridItem colSpan={1}>
               <Flex justify={'center'}>
-                <Stats completed={completed} last30Bool={last30Bool} setLast30Bool={setLast30Bool} sevenAvg={sevenAvg} setSevenAvg={setSevenAvg} />
+                {/* <Stats completed={completed} last30Bool={last30Bool} setLast30Bool={setLast30Bool} sevenAvg={sevenAvg} setSevenAvg={setSevenAvg} /> */}
+                <CompactLongTerms longTerm={longTerm} updateLists={updateLists} />
               </Flex>
             </GridItem>
           </Grid>

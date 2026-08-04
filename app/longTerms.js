@@ -27,23 +27,12 @@ function Popup({ name, longTerm, close }) {
   )
 }
 
-function LongTermPie({ longTerm, title, name, target, start, updateLists }) {
+function LongTermPie({ longTerm, title, name, target, start, updateLists, short = false }) {
   const [newVal, setNewVal] = useState();
   const [val, setVal] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [isPortal, setIsPortal] = useState(false);
   const [error, setError] = useState(false);
-
-
-  async function submitToServer(name, newVal) {
-    if (!newVal) {
-
-    }
-    setSubmitting(true)
-    await addLongTermRecord(name, newVal);
-    updateLists();
-    setSubmitting(false)
-  }
   useEffect(() => {
     if (!longTerm)
       return;
@@ -54,10 +43,25 @@ function LongTermPie({ longTerm, title, name, target, start, updateLists }) {
       }
     });
   }, [longTerm]);
+
+  if (short) {
+    return <PieChart title={title} percent={((start - val) / (start - target)) * 100} score={val} target={target} />
+  }
+
+  async function submitToServer(name, newVal) {
+    if (!newVal) {
+
+    }
+    setSubmitting(true)
+    await addLongTermRecord(name, newVal);
+    updateLists();
+    setSubmitting(false)
+  }
   return (
     <>
       <Stack direction={'column'}>
-        <PieChart title={title} percent={((start - val) / (start - target)) * 100} score={val} target={target} />
+        <h1>{"Input: " + title}</h1>
+        {/* <PieChart title={title} percent={((start - val) / (start - target)) * 100} score={val} target={target} /> */}
         <Input type="number" onChange={(e) => setNewVal(e.target.value)} maxW={100} />
         {submitting ?
           <Spinner size={'lg'} /> :
@@ -69,10 +73,24 @@ function LongTermPie({ longTerm, title, name, target, start, updateLists }) {
     </>
   );
 }
-export default function LongTerms({ longTerm, updateLists }) {
+export function CompactLongTerms({ longTerm, updateLists }) {
   return (
     <Flex justify={'center'} >
-      <Grid gridTemplateColumns={{ "base": "1fr 1fr", "md": "1fr 1fr 1fr 1fr 1fr" }} gap={10}>
+      <Grid gridTemplateColumns="1fr 1fr 1fr" gap={2}>
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'balance'} title={'Money'} target={10000} start={0} short={true} />
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'weight'} title={'Weight'} target={75} start={87} short={true} />
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'pull'} title={'Pull'} target={10} start={0} short={true} />
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'bench'} title={'Bench'} target={80} start={40} short={true} />
+        <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'run'} title={'Run'} target={15} start={8} short={true} />
+      </Grid>
+    </Flex>
+  )
+}
+
+export function LongTerms({ longTerm, updateLists }) {
+  return (
+    <Flex justify={'center'} >
+      <Grid gridTemplateColumns={{ "base": "1fr 1fr", "md": "repeat(5,1fr)" }} gap={10}>
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'balance'} title={'Money'} target={10000} start={0} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'weight'} title={'Weight'} target={75} start={87} />
         <LongTermPie longTerm={longTerm} updateLists={updateLists} name={'pull'} title={'Pull'} target={10} start={0} />
